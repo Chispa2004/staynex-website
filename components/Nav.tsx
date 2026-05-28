@@ -1,15 +1,41 @@
+"use client";
+
 import { ArrowRight, Menu } from "lucide-react";
 
-import { navItems, siteConfig } from "@/lib/site";
+import { useLanguage } from "@/components/LanguageProvider";
+import { type Locale, locales, getNavItems } from "@/lib/translations";
+
+function LanguageSelector({ compact = false }: { compact?: boolean }) {
+  const { locale, setLocale } = useLanguage();
+
+  return (
+    <div className={`language-switcher ${compact ? "language-switcher-compact" : ""}`} aria-label="Language selector">
+      {locales.map((item: Locale) => (
+        <button
+          aria-pressed={locale === item}
+          className={locale === item ? "is-active" : ""}
+          key={item}
+          onClick={() => setLocale(item)}
+          type="button"
+        >
+          {item.toUpperCase()}
+        </button>
+      ))}
+    </div>
+  );
+}
 
 export function Nav() {
+  const { t } = useLanguage();
+  const navItems = getNavItems(t);
+
   return (
     <header className="site-nav">
       <a className="brand" href="#home" aria-label="Staynex home">
         <span className="brand-mark">S</span>
         <span>
-          <strong>{siteConfig.name}</strong>
-          <small>{siteConfig.descriptor}</small>
+          <strong>Staynex</strong>
+          <small>{t.meta.descriptor}</small>
         </span>
       </a>
 
@@ -21,13 +47,15 @@ export function Nav() {
         ))}
       </nav>
 
+      <LanguageSelector />
+
       <a className="nav-cta" href="#demo">
-        Request demo
+        {t.nav.requestDemo}
         <ArrowRight aria-hidden="true" />
       </a>
 
       <details className="mobile-menu">
-        <summary aria-label="Open navigation">
+        <summary aria-label={t.nav.open}>
           <Menu aria-hidden="true" />
         </summary>
         <div>
@@ -36,6 +64,11 @@ export function Nav() {
               {item.label}
             </a>
           ))}
+          <a className="mobile-demo-link" href="#demo">
+            {t.nav.requestDemo}
+            <ArrowRight aria-hidden="true" />
+          </a>
+          <LanguageSelector compact />
         </div>
       </details>
     </header>

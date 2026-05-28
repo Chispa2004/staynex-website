@@ -1,24 +1,28 @@
+"use client";
+
 import { ArrowUpRight, CheckCircle2, MessageCircle, ShieldCheck, Sparkles } from "lucide-react";
 
-import { healthSignals, liveOperationCards } from "@/lib/site";
+import { useLanguage } from "@/components/LanguageProvider";
 
 export function DashboardMockup() {
+  const { t } = useLanguage();
+
   return (
     <div className="dashboard-stage" aria-label="Staynex product interface preview">
       <div className="hero-orbit hero-orbit-one" aria-hidden="true" />
       <div className="hero-orbit hero-orbit-two" aria-hidden="true" />
 
       <div className="floating-live-cloud" aria-hidden="true">
-        {liveOperationCards.map((card, index) => (
-          <div className={`live-card live-card-${index + 1}`} key={card.title}>
+        {t.liveCards.map(([title, meta, time, status, tone], index) => (
+          <div className={`live-card live-card-${index + 1}`} key={title}>
             <div className="live-card-top">
-              <span className={`live-dot tone-${card.tone}`} />
-              <small>{card.time}</small>
+              <span className={`live-dot tone-${tone}`} />
+              <small>{time}</small>
             </div>
-            <strong>{card.title}</strong>
+            <strong>{title}</strong>
             <div className="live-card-bottom">
-              <span>{card.meta}</span>
-              <em>{card.status}</em>
+              <span>{meta}</span>
+              <em>{status}</em>
             </div>
           </div>
         ))}
@@ -31,10 +35,10 @@ export function DashboardMockup() {
             <span />
             <span />
           </div>
-          <span>Staynex Command</span>
+          <span>{t.dashboard.command}</span>
           <strong>
             <i />
-            Live operations
+            {t.dashboard.liveOperations}
           </strong>
         </div>
 
@@ -42,14 +46,14 @@ export function DashboardMockup() {
           <section className="dash-panel main-panel">
             <div className="panel-title-row">
               <div>
-                <span className="panel-kicker">Today</span>
-                <h3>Guest journey control</h3>
+                <span className="panel-kicker">{t.dashboard.today}</span>
+                <h3>{t.dashboard.guestJourney}</h3>
               </div>
-              <span className="status-pill">Live</span>
+              <span className="status-pill">{t.dashboard.live}</span>
             </div>
 
             <div className="journey-timeline">
-              {["Pre-arrival", "Check-in", "In-stay", "Revenue", "Post-stay"].map((step, index) => (
+              {t.dashboard.journey.map((step, index) => (
                 <div className={`journey-step journey-step-${index + 1}`} key={step}>
                   <span>{index + 1}</span>
                   <strong>{step}</strong>
@@ -60,29 +64,29 @@ export function DashboardMockup() {
             <div className="conversation-preview">
               <div className="message incoming">
                 <MessageCircle aria-hidden="true" />
-                <p>Can we arrive early and book airport transfer?</p>
+                <p>{t.dashboard.guestMessage}</p>
               </div>
               <div className="message outgoing">
                 <Sparkles aria-hidden="true" />
-                <p>Early arrival noted. Transfer options are ready with your reservation details.</p>
+                <p>{t.dashboard.aiMessage}</p>
               </div>
             </div>
           </section>
 
           <section className="dash-panel readiness-panel">
-            <span className="panel-kicker">Reception</span>
-            <h3>Arrival readiness</h3>
+            <span className="panel-kicker">{t.dashboard.reception}</span>
+            <h3>{t.dashboard.arrivalReadiness}</h3>
             <div className="readiness-ring">
               <span>92%</span>
             </div>
-            <p>128 arrivals checked against documents, preferences and folio status.</p>
+            <p>{t.dashboard.readinessBody}</p>
           </section>
 
           <section className="dash-panel revenue-panel">
             <div className="panel-title-row">
               <div>
-                <span className="panel-kicker">Revenue</span>
-                <h3>Experience signals</h3>
+                <span className="panel-kicker">{t.dashboard.revenue}</span>
+                <h3>{t.dashboard.experienceSignals}</h3>
               </div>
               <ArrowUpRight aria-hidden="true" />
             </div>
@@ -93,18 +97,18 @@ export function DashboardMockup() {
               <span style={{ height: "82%" }} />
               <span style={{ height: "61%" }} />
             </div>
-            <p>Late check-out, spa and excursions are trending for this weekend.</p>
+            <p>{t.dashboard.revenueBody}</p>
           </section>
 
           <section className="dash-panel health-panel">
-            <span className="panel-kicker">Hotel health</span>
-            <h3>Quality monitor</h3>
+            <span className="panel-kicker">{t.dashboard.hotelHealth}</span>
+            <h3>{t.dashboard.qualityMonitor}</h3>
             <div className="health-list">
-              {healthSignals.map((signal) => (
-                <div className="health-row" key={signal.label}>
-                  <span className={`tone-dot tone-${signal.tone}`} />
-                  <span>{signal.label}</span>
-                  <strong>{signal.value}</strong>
+              {t.health.signals.map(([label, value, tone]) => (
+                <div className="health-row" key={label}>
+                  <span className={`tone-dot tone-${tone}`} />
+                  <span>{label}</span>
+                  <strong>{value}</strong>
                 </div>
               ))}
             </div>
@@ -113,18 +117,18 @@ export function DashboardMockup() {
           <section className="dash-panel ai-panel">
             <div>
               <ShieldCheck aria-hidden="true" />
-              <span className="panel-kicker">AI Quality Lab</span>
+              <span className="panel-kicker">{t.dashboard.aiQualityLab}</span>
             </div>
-            <h3>Replay ready</h3>
-            <p>Long journey simulation completed across 18 guest intents.</p>
+            <h3>{t.dashboard.replayReady}</h3>
+            <p>{t.dashboard.replayBody}</p>
             <div className="mini-checks">
               <span>
                 <CheckCircle2 aria-hidden="true" />
-                Policy match
+                {t.dashboard.policyMatch}
               </span>
               <span>
                 <CheckCircle2 aria-hidden="true" />
-                Handover timing
+                {t.dashboard.handoverTiming}
               </span>
             </div>
           </section>
@@ -134,13 +138,13 @@ export function DashboardMockup() {
       <div className="operations-feed">
         <div className="feed-header">
           <span className="tone-dot tone-green" />
-          <strong>Operational feed</strong>
+          <strong>{t.dashboard.feed}</strong>
         </div>
-        {liveOperationCards.slice(0, 4).map((card) => (
-          <div className="feed-row" key={card.title}>
-            <span className={`tone-dot tone-${card.tone}`} />
-            <p>{card.title}</p>
-            <small>{card.time}</small>
+        {t.liveCards.slice(0, 4).map(([title, , time, , tone]) => (
+          <div className="feed-row" key={title}>
+            <span className={`tone-dot tone-${tone}`} />
+            <p>{title}</p>
+            <small>{time}</small>
           </div>
         ))}
       </div>

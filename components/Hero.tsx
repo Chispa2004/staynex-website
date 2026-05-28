@@ -1,40 +1,43 @@
+"use client";
+
 import { ArrowRight, PlayCircle } from "lucide-react";
 
-import { siteConfig } from "@/lib/site";
 import { DashboardMockup } from "@/components/DashboardMockup";
+import { useLanguage } from "@/components/LanguageProvider";
 
 export function Hero() {
+  const { t } = useLanguage();
+
   return (
     <section className="hero" id="home">
       <div className="hero-bg" aria-hidden="true" />
       <div className="hero-inner">
         <div className="hero-copy">
-          <p className="hero-label">{siteConfig.descriptor}</p>
-          <h1>{siteConfig.headline}</h1>
-          <p className="hero-subtitle">{siteConfig.description}</p>
+          <p className="hero-label">{t.meta.descriptor}</p>
+          <h1>{t.meta.headline}</h1>
+          <p className="hero-subtitle">{t.meta.description}</p>
           <div className="hero-live-row" aria-label="Live operational signals">
-            <span>
-              <i />
-              Live guest journeys
-            </span>
-            <span>Reception ready</span>
-            <span>Revenue detected</span>
+            {t.hero.live.map((item, index) => (
+              <span key={item}>
+                {index === 0 ? <i /> : null}
+                {item}
+              </span>
+            ))}
           </div>
           <div className="hero-actions">
             <a className="button button-primary" href="#demo">
-              Request demo
+              {t.hero.ctaPrimary}
               <ArrowRight aria-hidden="true" />
             </a>
             <a className="button button-secondary" href="#product">
               <PlayCircle aria-hidden="true" />
-              Explore platform
+              {t.hero.ctaSecondary}
             </a>
           </div>
           <div className="hero-proof" aria-label="Platform capabilities">
-            <span>Guest communication</span>
-            <span>Reception workflows</span>
-            <span>Provider revenue</span>
-            <span>AI quality monitoring</span>
+            {t.hero.proof.map((item) => (
+              <span key={item}>{item}</span>
+            ))}
           </div>
         </div>
 

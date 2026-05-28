@@ -6,11 +6,11 @@ import "@/styles/globals.css";
 export const metadata: Metadata = {
   metadataBase: new URL("https://staynex.ai"),
   title: {
-    default: "Staynex | AI operations for modern hotels",
+    default: "Staynex | AI Hospitality Operations Platform",
     template: "%s | Staynex"
   },
   description:
-    "Staynex centralizes guest communication, hotel operations, AI workflows, revenue opportunities and hospitality intelligence in one platform.",
+    "AI operations platform for hotels: guest communication, reception workflows, WhatsApp AI, provider bookings, revenue opportunities and hotel health monitoring.",
   keywords: [
     "AI hospitality operations",
     "hotel operations platform",
@@ -22,7 +22,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Staynex | AI Hospitality Operations Platform",
     description:
-      "AI operations for modern hotels across guest communication, reception readiness, revenue experiences and AI quality monitoring.",
+      "AI operations platform for hotels: guest communication, reception workflows, WhatsApp AI, provider bookings, revenue opportunities and hotel health monitoring.",
     url: "https://staynex.ai",
     siteName: "Staynex",
     type: "website"

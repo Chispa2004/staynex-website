@@ -1,3 +1,6 @@
+"use client";
+
+import { useState } from "react";
 import {
   ArrowRight,
   BellRing,
@@ -15,54 +18,21 @@ import {
   Workflow
 } from "lucide-react";
 
-import {
-  demoFlow,
-  healthSignals,
-  hotelPainPoints,
-  journeySections,
-  labFeatures,
-  metricStripItems,
-  operationCards,
-  productPillars,
-  revenueCards
-} from "@/lib/site";
 import { IconBadge } from "@/components/IconBadge";
+import { useLanguage } from "@/components/LanguageProvider";
 import { SectionHeader } from "@/components/SectionHeader";
 
-export function ProductSection() {
-  return (
-    <section className="section-shell" id="product">
-      <SectionHeader
-        eyebrow="Product"
-        title="One hospitality operations layer, not another chatbot."
-        body="Staynex brings guest messaging, reception workflows, experience revenue and AI quality into a single operating surface for modern hotels."
-        align="center"
-      />
-
-      <div className="pillar-grid">
-        {productPillars.map((pillar) => (
-          <article className="pillar-card" key={pillar.eyebrow}>
-            <IconBadge icon={pillar.icon} label={pillar.eyebrow} />
-            <p className="eyebrow">{pillar.eyebrow}</p>
-            <h3>{pillar.title}</h3>
-            <p>{pillar.body}</p>
-            <div className="tag-row">
-              {pillar.points.map((point) => (
-                <span key={point}>{point}</span>
-              ))}
-            </div>
-          </article>
-        ))}
-      </div>
-    </section>
-  );
-}
+const receptionIcons = [CalendarClock, UserRoundCheck, ClipboardCheck, ShieldCheck];
+const whatsappIcons = [MessagesSquare, Languages, Radar, Workflow];
+const labIcons = [BellRing, Radar, RotateCcw];
 
 export function MetricsStrip() {
+  const { t } = useLanguage();
+
   return (
     <section className="metrics-strip" aria-label="Staynex platform capabilities">
       <div className="metrics-track">
-        {[...metricStripItems, ...metricStripItems].map((item, index) => (
+        {[...t.metrics, ...t.metrics].map((item, index) => (
           <span key={`${item}-${index}`}>
             <i />
             {item}
@@ -74,17 +44,14 @@ export function MetricsStrip() {
 }
 
 export function StorytellingSection() {
+  const { t } = useLanguage();
+
   return (
     <section className="story-section section-shell" id="journeys">
-      <SectionHeader
-        eyebrow="Guest journey operations"
-        title="Every stay creates operational moments. Staynex connects them."
-        body="From first WhatsApp message to post-stay retention, Staynex turns guest intent into coordinated hotel workflows."
-        align="center"
-      />
+      <SectionHeader eyebrow={t.story.eyebrow} title={t.story.title} body={t.story.body} align="center" />
 
       <div className="story-grid">
-        {journeySections.map((journey, index) => (
+        {t.story.sections.map((journey, index) => (
           <article className="story-card" key={journey.title}>
             <div className="story-copy">
               <span className="story-index">{String(index + 1).padStart(2, "0")}</span>
@@ -102,8 +69,8 @@ export function StorytellingSection() {
               <div className="journey-phone">
                 <div className="phone-header compact-phone-header">
                   <span />
-                  <strong>Guest WhatsApp</strong>
-                  <small>Active journey</small>
+                  <strong>WhatsApp</strong>
+                  <small>{journey.eyebrow}</small>
                 </div>
                 <p className="bubble guest">{journey.primary}</p>
                 <p className="bubble ai">{journey.secondary}</p>
@@ -125,30 +92,47 @@ export function StorytellingSection() {
   );
 }
 
+export function HowItWorksSection() {
+  const { t } = useLanguage();
+
+  return (
+    <section className="section-shell how-section" id="how-it-works">
+      <SectionHeader eyebrow={t.howItWorks.eyebrow} title={t.howItWorks.title} body={t.howItWorks.body} align="center" />
+      <div className="how-grid">
+        {t.howItWorks.steps.map(([title, body], index) => (
+          <article className="how-card" key={title}>
+            <span>{String(index + 1).padStart(2, "0")}</span>
+            <h3>{title}</h3>
+            <p>{body}</p>
+          </article>
+        ))}
+      </div>
+    </section>
+  );
+}
+
 export function WhyHotelsSection() {
+  const { t } = useLanguage();
+
   return (
     <section className="why-section section-band" id="why-hotels">
       <div className="section-shell why-grid">
         <div>
-          <SectionHeader
-            eyebrow="Why hotels need this"
-            title="Hospitality teams are not short on messages. They are short on connected operations."
-            body="Staynex is built for the work behind every guest conversation: departments, policies, timing, revenue, service recovery and human judgment."
-          />
+          <SectionHeader eyebrow={t.why.eyebrow} title={t.why.title} body={t.why.body} />
           <div className="why-proof">
             <span>
               <ConciergeBell aria-hidden="true" />
-              Hotel-native workflows
+              {t.why.proof[0]}
             </span>
             <span>
               <ShieldCheck aria-hidden="true" />
-              AI with operational control
+              {t.why.proof[1]}
             </span>
           </div>
         </div>
 
         <div className="pain-grid">
-          {hotelPainPoints.map(([problem, solution]) => (
+          {t.why.points.map(([problem, solution]) => (
             <article className="pain-card" key={problem}>
               <div>
                 <span className="pain-dot" />
@@ -163,21 +147,80 @@ export function WhyHotelsSection() {
   );
 }
 
+export function BuiltForHotelsSection() {
+  const { t } = useLanguage();
+
+  return (
+    <section className="section-shell chatbot-section" id="built-for-hotels">
+      <div className="chatbot-panel">
+        <SectionHeader eyebrow={t.chatbot.eyebrow} title={t.chatbot.title} body={t.chatbot.body} />
+        <div className="chatbot-grid">
+          {t.chatbot.points.map((point) => (
+            <span key={point}>
+              <CheckCircle2 aria-hidden="true" />
+              {point}
+            </span>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+export function ScenariosSection() {
+  const { t } = useLanguage();
+
+  return (
+    <section className="section-shell scenarios-section" id="scenarios">
+      <SectionHeader eyebrow={t.scenarios.eyebrow} title={t.scenarios.title} body={t.scenarios.body} align="center" />
+      <div className="scenario-grid">
+        {t.scenarios.items.map(([title, body], index) => (
+          <article className="scenario-card" key={title}>
+            <span>{String(index + 1).padStart(2, "0")}</span>
+            <h3>{title}</h3>
+            <p>{body}</p>
+          </article>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+export function ProductSection() {
+  const { t } = useLanguage();
+
+  return (
+    <section className="section-shell" id="product">
+      <SectionHeader eyebrow={t.product.eyebrow} title={t.product.title} body={t.product.body} align="center" />
+
+      <div className="pillar-grid">
+        {t.product.pillars.map((pillar) => (
+          <article className="pillar-card" key={pillar.eyebrow}>
+            <IconBadge icon={pillar.icon} label={pillar.eyebrow} />
+            <p className="eyebrow">{pillar.eyebrow}</p>
+            <h3>{pillar.title}</h3>
+            <p>{pillar.body}</p>
+            <div className="tag-row">
+              {pillar.points.map((point) => (
+                <span key={point}>{point}</span>
+              ))}
+            </div>
+          </article>
+        ))}
+      </div>
+    </section>
+  );
+}
+
 export function OperationsSection() {
+  const { t } = useLanguage();
+
   return (
     <section className="split-section section-shell" id="operations">
       <div>
-        <SectionHeader
-          eyebrow="Operations"
-          title="Give hotel teams a calmer command center."
-          body="Operations teams can see what guests need, what AI handled, what requires staff judgment and where service recovery should happen now."
-        />
+        <SectionHeader eyebrow={t.operations.eyebrow} title={t.operations.title} body={t.operations.body} />
         <div className="feature-list">
-          {[
-            ["Workflow routing", "Classify routine, revenue, urgent and policy-sensitive conversations."],
-            ["Human takeover", "Bring reception into the right conversation with guest context already prepared."],
-            ["PMS-ready thinking", "Structure data around reservations, folios, arrival windows and hotel policies."]
-          ].map(([title, body]) => (
+          {t.operations.features.map(([title, body]) => (
             <div className="feature-row" key={title}>
               <CheckCircle2 aria-hidden="true" />
               <div>
@@ -190,12 +233,12 @@ export function OperationsSection() {
       </div>
 
       <div className="metric-grid">
-        {operationCards.map((card) => (
-          <article className="metric-card" key={card.title}>
-            <span>{card.metric}</span>
-            <strong>{card.title}</strong>
-            <p>{card.body}</p>
-            <small>{card.label}</small>
+        {t.operations.cards.map(([metric, title, body, label]) => (
+          <article className="metric-card" key={title}>
+            <span>{metric}</span>
+            <strong>{title}</strong>
+            <p>{body}</p>
+            <small>{label}</small>
           </article>
         ))}
       </div>
@@ -203,72 +246,15 @@ export function OperationsSection() {
   );
 }
 
-export function ReceptionSection() {
-  return (
-    <section className="section-band" id="reception">
-      <div className="section-shell reception-grid">
-        <div className="visual-panel reception-visual">
-          <div className="arrival-card">
-            <span className="eyebrow">Pre check-in</span>
-            <h3>Arrivals today</h3>
-            {[
-              ["Elena Costa", "Documents complete", "Ready"],
-              ["Martin Keller", "Folio needs review", "Review"],
-              ["Ari Nguyen", "Arrival at 21:40", "Ready"]
-            ].map(([name, detail, status]) => (
-              <div className="arrival-row" key={name}>
-                <span>{name.slice(0, 2).toUpperCase()}</span>
-                <div>
-                  <strong>{name}</strong>
-                  <small>{detail}</small>
-                </div>
-                <em>{status}</em>
-              </div>
-            ))}
-          </div>
-          <div className="folio-preview">
-            <ClipboardCheck aria-hidden="true" />
-            <strong>Folio preview</strong>
-            <p>Balance, room notes and guest preferences surfaced before the arrival wave.</p>
-          </div>
-        </div>
-
-        <div>
-          <SectionHeader
-            eyebrow="Reception / Pre Check-in"
-            title="Arrival intelligence before front desk pressure begins."
-            body="Staynex helps reception teams prepare each arrival with guest lookup, pre check-in status, folio preview and operational readiness in view."
-          />
-          <div className="compact-grid">
-            {[
-              ["Pre check-in", CalendarClock],
-              ["Guest lookup", UserRoundCheck],
-              ["Folio preview", ClipboardCheck],
-              ["Operational readiness", ShieldCheck]
-            ].map(([label, Icon]) => (
-              <div className="compact-tile" key={label as string}>
-                <Icon aria-hidden="true" />
-                <span>{label as string}</span>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
-    </section>
-  );
-}
-
 export function RevenueSection() {
+  const { t } = useLanguage();
+
   return (
     <section className="split-section section-shell" id="revenue">
       <div>
-        <SectionHeader
-          eyebrow="Revenue & Experiences"
-          title="Turn guest intent into curated hospitality revenue."
-          body="Staynex can surface relevant experiences, providers, services and upgrades from inside the guest journey, with reporting that keeps teams focused on value."
-        />
+        <SectionHeader eyebrow={t.revenue.eyebrow} title={t.revenue.title} body={t.revenue.body} />
         <div className="revenue-list">
-          {revenueCards.map((item) => (
+          {t.revenue.list.map((item) => (
             <div key={item}>
               <CircleDollarSign aria-hidden="true" />
               <span>{item}</span>
@@ -279,14 +265,10 @@ export function RevenueSection() {
 
       <div className="marketplace-preview">
         <div className="marketplace-top">
-          <span className="eyebrow">Experience Marketplace</span>
-          <strong>Weekend opportunities</strong>
+          <span className="eyebrow">{t.revenue.eyebrow}</span>
+          <strong>{t.revenue.previewTitle}</strong>
         </div>
-        {[
-          ["Airport transfer", "Arrivals after 20:00", "+18% intent"],
-          ["Sunset excursion", "Couples and families", "+31% intent"],
-          ["Spa upgrade", "Rain forecast window", "+24% intent"]
-        ].map(([title, audience, trend]) => (
+        {t.revenue.rows.map(([title, audience, trend]) => (
           <div className="marketplace-row" key={title}>
             <div>
               <strong>{title}</strong>
@@ -300,44 +282,89 @@ export function RevenueSection() {
   );
 }
 
+export function ReceptionSection() {
+  const { t } = useLanguage();
+
+  return (
+    <section className="section-band" id="reception">
+      <div className="section-shell reception-grid">
+        <div className="visual-panel reception-visual">
+          <div className="arrival-card">
+            <span className="eyebrow">{t.reception.visualEyebrow}</span>
+            <h3>{t.reception.arrivals}</h3>
+            {t.reception.guests.map(([name, detail, status]) => (
+              <div className="arrival-row" key={name}>
+                <span>{name.slice(0, 2).toUpperCase()}</span>
+                <div>
+                  <strong>{name}</strong>
+                  <small>{detail}</small>
+                </div>
+                <em>{status}</em>
+              </div>
+            ))}
+          </div>
+          <div className="folio-preview">
+            <ClipboardCheck aria-hidden="true" />
+            <strong>{t.reception.folioTitle}</strong>
+            <p>{t.reception.folioBody}</p>
+          </div>
+        </div>
+
+        <div>
+          <SectionHeader eyebrow={t.reception.eyebrow} title={t.reception.title} body={t.reception.body} />
+          <div className="compact-grid">
+            {t.reception.tiles.map((label, index) => {
+              const Icon = receptionIcons[index] ?? ClipboardCheck;
+
+              return (
+                <div className="compact-tile" key={label}>
+                  <Icon aria-hidden="true" />
+                  <span>{label}</span>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
 export function WhatsAppSection() {
+  const { t } = useLanguage();
+
   return (
     <section className="section-shell whatsapp-section" id="ai-whatsapp">
-      <SectionHeader
-        eyebrow="AI + WhatsApp"
-        title="Meet guests where they already communicate."
-        body="Staynex treats WhatsApp as the guest-facing layer of a broader operations platform, connecting conversation, reservation context, human takeover and quality monitoring."
-        align="center"
-      />
+      <SectionHeader eyebrow={t.whatsapp.eyebrow} title={t.whatsapp.title} body={t.whatsapp.body} align="center" />
 
       <div className="whatsapp-grid">
         <div className="phone-frame">
           <div className="phone-header">
             <span />
-            <strong>Staynex Concierge</strong>
-            <small>Online</small>
+            <strong>{t.whatsapp.header}</strong>
+            <small>{t.whatsapp.online}</small>
           </div>
           <div className="phone-chat">
-            <p className="bubble guest">Hi, can I check in before arriving?</p>
-            <p className="bubble ai">Yes. I can help you complete pre check-in and confirm your arrival time.</p>
-            <p className="bubble guest">Also, do you have boat tours tomorrow?</p>
-            <p className="bubble ai">I found two available providers. Would you like private or shared options?</p>
+            {t.whatsapp.chat.map(([who, message]) => (
+              <p className={`bubble ${who}`} key={message}>
+                {message}
+              </p>
+            ))}
           </div>
         </div>
 
         <div className="capability-grid">
-          {[
-            ["WhatsApp native", MessagesSquare, "Guest conversations stay simple on the front end and operationally rich behind the scenes."],
-            ["Multilingual", Languages, "Support international guests across arrival, in-stay support and service recommendations."],
-            ["24/7 coverage", Radar, "Handle repetitive moments instantly while preserving escalation paths for staff."],
-            ["Human takeover", Workflow, "Route sensitive, urgent or VIP interactions to hotel teams with context attached."]
-          ].map(([title, Icon, body]) => (
-            <article className="capability-card" key={title as string}>
-              <Icon aria-hidden="true" />
-              <h3>{title as string}</h3>
-              <p>{body as string}</p>
-            </article>
-          ))}
+          {t.whatsapp.cards.map(([title, body], index) => {
+            const Icon = whatsappIcons[index] ?? MessagesSquare;
+
+            return (
+              <article className="capability-card" key={title}>
+                <Icon aria-hidden="true" />
+                <h3>{title}</h3>
+                <p>{body}</p>
+              </article>
+            );
+          })}
         </div>
       </div>
     </section>
@@ -345,32 +372,30 @@ export function WhatsAppSection() {
 }
 
 export function HealthSection() {
+  const { t } = useLanguage();
+
   return (
     <section className="section-band health-band" id="health">
       <div className="section-shell split-section">
         <div>
-          <SectionHeader
-            eyebrow="Hotel Health & Monitoring"
-            title="Operational visibility for AI-powered hospitality."
-            body="Monitor journey quality, escalation patterns, unresolved conversations, revenue intent and policy gaps before they become guest-facing issues."
-          />
+          <SectionHeader eyebrow={t.health.eyebrow} title={t.health.title} body={t.health.body} />
           <a className="text-link" href="#demo">
-            See the health layer
+            {t.health.link}
             <ArrowRight aria-hidden="true" />
           </a>
         </div>
 
         <div className="health-console">
-          {healthSignals.map((signal) => (
-            <div className="health-stat" key={signal.label}>
-              <span className={`tone-dot tone-${signal.tone}`} />
-              <strong>{signal.value}</strong>
-              <small>{signal.label}</small>
+          {t.health.signals.map(([label, value, tone]) => (
+            <div className="health-stat" key={label}>
+              <span className={`tone-dot tone-${tone}`} />
+              <strong>{value}</strong>
+              <small>{label}</small>
             </div>
           ))}
           <div className="alert-strip">
             <BellRing aria-hidden="true" />
-            <span>Alert: 3 pre-arrival journeys need policy review before 18:00.</span>
+            <span>{t.health.alert}</span>
           </div>
         </div>
       </div>
@@ -379,73 +404,72 @@ export function HealthSection() {
 }
 
 export function QualityLabSection() {
+  const { t } = useLanguage();
+
   return (
     <section className="section-shell" id="quality-lab">
-      <SectionHeader
-        eyebrow="AI Quality Lab"
-        title="Improve AI before guests notice the edge cases."
-        body="Staynex is designed for operational learning: test long journeys, replay conversations and understand exactly why an automation failed."
-        align="center"
-      />
+      <SectionHeader eyebrow={t.lab.eyebrow} title={t.lab.title} body={t.lab.body} align="center" />
 
       <div className="lab-grid">
-        {labFeatures.map((feature, index) => (
-          <article className="lab-card" key={feature.title}>
-            <div className="lab-index">{String(index + 1).padStart(2, "0")}</div>
-            <h3>{feature.title}</h3>
-            <p>{feature.body}</p>
-            <div className="lab-icon-row">
-              {index === 0 ? <BellRing aria-hidden="true" /> : null}
-              {index === 1 ? <Radar aria-hidden="true" /> : null}
-              {index === 2 ? <RotateCcw aria-hidden="true" /> : null}
-            </div>
-          </article>
-        ))}
+        {t.lab.features.map(([title, body], index) => {
+          const Icon = labIcons[index] ?? BellRing;
+
+          return (
+            <article className="lab-card" key={title}>
+              <div className="lab-index">{String(index + 1).padStart(2, "0")}</div>
+              <h3>{title}</h3>
+              <p>{body}</p>
+              <div className="lab-icon-row">
+                <Icon aria-hidden="true" />
+              </div>
+            </article>
+          );
+        })}
       </div>
     </section>
   );
 }
 
 export function DemoSection() {
+  const { t } = useLanguage();
+
   return (
     <section className="demo-experience section-shell" id="demo">
       <div className="demo-copy">
-        <p className="eyebrow">Demo</p>
-        <h2>See Staynex in action</h2>
-        <p>
-          One journey can trigger WhatsApp replies, reception readiness, provider booking, AI monitoring and human
-          takeover. The product story stays operational from the first message.
-        </p>
+        <p className="eyebrow">{t.demo.eyebrow}</p>
+        <h2>{t.demo.title}</h2>
+        <p>{t.demo.body}</p>
       </div>
 
       <div className="demo-visual-grid">
         <div className="demo-phone">
           <div className="phone-header">
             <span />
-            <strong>Staynex Concierge</strong>
-            <small>AI + human ready</small>
+            <strong>{t.demo.phoneTitle}</strong>
+            <small>{t.demo.phoneStatus}</small>
           </div>
           <div className="phone-chat demo-chat">
-            <p className="bubble guest">Can I arrive early and book a transfer?</p>
-            <p className="bubble ai">Yes. I found your reservation and prepared transfer options.</p>
-            <p className="bubble guest">Please send a private option.</p>
-            <p className="bubble ai">Done. Reception has your arrival time and provider booking request.</p>
+            {t.demo.chat.map(([who, message]) => (
+              <p className={`bubble ${who}`} key={message}>
+                {message}
+              </p>
+            ))}
           </div>
         </div>
 
         <div className="demo-command">
           <div className="demo-command-header">
             <span className="tone-dot tone-green" />
-            <strong>Live demo flow</strong>
-            <small>5 connected steps</small>
+            <strong>{t.demo.flowTitle}</strong>
+            <small>{t.demo.flowCount}</small>
           </div>
-          {demoFlow.map((step, index) => (
-            <article className="demo-flow-card" key={step.label}>
+          {t.demo.flow.map(([label, title, body], index) => (
+            <article className="demo-flow-card" key={label}>
               <span>{String(index + 1).padStart(2, "0")}</span>
               <div>
-                <small>{step.label}</small>
-                <strong>{step.title}</strong>
-                <p>{step.body}</p>
+                <small>{label}</small>
+                <strong>{title}</strong>
+                <p>{body}</p>
               </div>
             </article>
           ))}
@@ -454,14 +478,14 @@ export function DemoSection() {
         <div className="demo-monitor">
           <div className="monitor-top">
             <Radar aria-hidden="true" />
-            <span>AI monitoring</span>
+            <span>{t.demo.monitoring}</span>
           </div>
           <div className="monitor-score">
             <strong>98%</strong>
-            <small>journey confidence</small>
+            <small>{t.demo.score}</small>
           </div>
           <div className="monitor-list">
-            {["Policy matched", "Provider booking sent", "Reception updated", "Human takeover available"].map((item) => (
+            {t.demo.checks.map((item) => (
               <span key={item}>
                 <CheckCircle2 aria-hidden="true" />
                 {item}
@@ -472,12 +496,79 @@ export function DemoSection() {
       </div>
 
       <div className="demo-actions">
-        <a className="button button-primary" href="mailto:hello@staynex.ai?subject=Staynex%20demo%20request">
-          Request demo
+        <a className="button button-primary" href="#request-demo">
+          {t.demo.ctaPrimary}
           <ArrowRight aria-hidden="true" />
         </a>
         <a className="button button-secondary" href="#contact">
-          Contact team
+          {t.demo.ctaSecondary}
+        </a>
+      </div>
+    </section>
+  );
+}
+
+export function DemoFormSection() {
+  const { t } = useLanguage();
+  const [submitted, setSubmitted] = useState(false);
+
+  return (
+    <section className="section-shell request-demo-section" id="request-demo">
+      <div>
+        <SectionHeader eyebrow={t.form.eyebrow} title={t.form.title} body={t.form.body} />
+      </div>
+      <form
+        className="demo-form"
+        onSubmit={(event) => {
+          event.preventDefault();
+          setSubmitted(true);
+        }}
+      >
+        <label>
+          <span>{t.form.name}</span>
+          <input name="name" required type="text" />
+        </label>
+        <label>
+          <span>{t.form.company}</span>
+          <input name="company" required type="text" />
+        </label>
+        <label>
+          <span>{t.form.email}</span>
+          <input name="email" required type="email" />
+        </label>
+        <label>
+          <span>{t.form.rooms}</span>
+          <input min="1" name="rooms" type="number" />
+        </label>
+        <label className="form-wide">
+          <span>{t.form.message}</span>
+          <textarea name="message" rows={4} />
+        </label>
+        <button className="button button-primary form-wide" type="submit">
+          {t.form.submit}
+          <ArrowRight aria-hidden="true" />
+        </button>
+        {submitted ? <p className="form-success form-wide">{t.form.success}</p> : null}
+      </form>
+    </section>
+  );
+}
+
+export function FinalCtaSection() {
+  const { t } = useLanguage();
+
+  return (
+    <section className="final-cta section-shell">
+      <p className="eyebrow">{t.finalCta.eyebrow}</p>
+      <h2>{t.finalCta.title}</h2>
+      <p>{t.finalCta.body}</p>
+      <div className="hero-actions">
+        <a className="button button-primary" href="#request-demo">
+          {t.finalCta.primary}
+          <ArrowRight aria-hidden="true" />
+        </a>
+        <a className="button button-secondary" href="#product">
+          {t.finalCta.secondary}
         </a>
       </div>
     </section>
@@ -485,19 +576,17 @@ export function DemoSection() {
 }
 
 export function ContactSection() {
+  const { t } = useLanguage();
+
   return (
     <section className="section-shell contact-section" id="contact">
       <div>
-        <SectionHeader
-          eyebrow="Contact"
-          title="Built for hotels ready to operationalize AI."
-          body="Use this commercial base for investor conversations, hotel pilots, demo bookings and future public launch pages."
-        />
+        <SectionHeader eyebrow={t.contact.eyebrow} title={t.contact.title} body={t.contact.body} />
       </div>
       <div className="contact-card">
         <span className="eyebrow">Staynex</span>
-        <h3>AI Hospitality Operations Platform</h3>
-        <p>Public website foundation prepared for SEO, analytics, CMS content and multilingual expansion.</p>
+        <h3>{t.meta.descriptor}</h3>
+        <p>{t.contact.cardBody}</p>
         <a className="text-link" href="mailto:hello@staynex.ai">
           hello@staynex.ai
           <ArrowRight aria-hidden="true" />

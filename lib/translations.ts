@@ -18,7 +18,7 @@ export const translations = {
   en: {
     meta: {
       descriptor: "AI Hospitality Operations Platform",
-      headline: "AI operations for modern hotels",
+      headline: "AI operations for hotels",
       description:
         "Staynex centralizes guest communication, hotel operations, AI workflows, revenue opportunities and hospitality intelligence in one platform."
     },
@@ -223,7 +223,7 @@ export const translations = {
         ["PMS-ready thinking", "Structure data around reservations, folios, arrival windows and hotel policies."]
       ],
       cards: [
-        ["92%", "Guest readiness", "Identify missing documents, arrival timing, special requests and room readiness from a single operational view.", "ready arrivals"],
+        ["92%", "Guest arrival readiness", "Identify missing documents, arrival timing, special requests and room readiness from a single operational view.", "ready arrivals"],
         ["38%", "Reception focus", "Route routine messages to AI and bring staff into conversations only when judgment or empathy is needed.", "less repetitive work"],
         ["<2m", "Service recovery", "Escalate issues when intent, urgency or sentiment suggests a human should step in immediately.", "priority alerting"]
       ]
@@ -273,7 +273,7 @@ export const translations = {
         ["guest", "Hi, can I check in before arriving?"],
         ["ai", "Yes. I can help you complete pre check-in and confirm your arrival time."],
         ["guest", "Also, do you have boat tours tomorrow?"],
-        ["ai", "I found two available providers. Would you like private or shared options?"]
+        ["ai", "Our experience partner has these options available for tomorrow. Would you prefer a private or shared option?"]
       ],
       cards: [
         ["WhatsApp native", "Guest conversations stay simple on the front end and operationally rich behind the scenes."],
@@ -369,7 +369,7 @@ export const translations = {
   es: {
     meta: {
       descriptor: "Plataforma de operaciones hoteleras con IA",
-      headline: "Operaciones con IA para hoteles modernos",
+      headline: "Operaciones con IA para hoteles",
       description:
         "Staynex centraliza la comunicación con huéspedes, las operaciones del hotel, los flujos de IA, las oportunidades de revenue y la inteligencia hospitality en una sola plataforma."
     },
@@ -569,7 +569,7 @@ export const translations = {
         ["Pensado para PMS", "Estructura datos alrededor de reservas, folios, llegada y políticas."]
       ],
       cards: [
-        ["92%", "Readiness de huéspedes", "Identifica documentos, hora de llegada, peticiones y preparación de habitación.", "llegadas listas"],
+        ["92%", "Preparación llegada de huéspedes", "Identifica documentos, hora de llegada, peticiones y preparación de habitación.", "llegadas listas"],
         ["38%", "Foco de recepción", "La IA absorbe lo repetitivo y deja al equipo los momentos de criterio.", "menos trabajo repetitivo"],
         ["<2m", "Service recovery", "Escala incidencias cuando intención, urgencia o sentimiento lo requieren.", "alerta prioritaria"]
       ]
@@ -619,7 +619,7 @@ export const translations = {
         ["guest", "Hola, ¿puedo hacer check-in antes de llegar?"],
         ["ai", "Sí. Puedo ayudarte a completar el pre check-in y confirmar tu hora de llegada."],
         ["guest", "También, ¿hay excursiones en barco mañana?"],
-        ["ai", "He encontrado dos proveedores disponibles. ¿Prefieres opción privada o compartida?"]
+        ["ai", "Nuestro proveedor de experiencias ofrece estas opciones para mañana. ¿Prefieres una opción privada o compartida?"]
       ],
       cards: [
         ["WhatsApp nativo", "Conversaciones simples para el huésped y ricas operativamente detrás."],
@@ -715,7 +715,7 @@ export const translations = {
   fr: {
     meta: {
       descriptor: "Plateforme d'operations hotelieres avec IA",
-      headline: "Operations IA pour hotels modernes",
+      headline: "Opérations IA pour hôtels",
       description:
         "Staynex centralise la communication client, les operations hotelieres, les workflows IA, les opportunites de revenu et l'intelligence hospitality dans une seule plateforme."
     },
@@ -915,7 +915,7 @@ export const translations = {
         ["Pense pour le PMS", "Structurez donnees autour reservations, folios, arrivees et politiques."]
       ],
       cards: [
-        ["92%", "Readiness clients", "Identifie documents, heure d'arrivee, demandes et preparation chambre.", "arrivees pretes"],
+        ["92%", "Préparation arrivée clients", "Identifie documents, heure d'arrivee, demandes et preparation chambre.", "arrivees pretes"],
         ["38%", "Focus reception", "L'IA absorbe le repetitif et garde au staff les moments de jugement.", "moins de repetitif"],
         ["<2m", "Service recovery", "Escalade les incidents selon intention, urgence ou sentiment.", "alerte prioritaire"]
       ]
@@ -965,7 +965,7 @@ export const translations = {
         ["guest", "Bonjour, puis-je faire le check-in avant d'arriver ?"],
         ["ai", "Oui. Je peux vous aider a completer le pre check-in et confirmer votre heure d'arrivee."],
         ["guest", "Avez-vous des sorties bateau demain ?"],
-        ["ai", "J'ai trouve deux partenaires disponibles. Preferez-vous prive ou partage ?"]
+        ["ai", "Notre partenaire d’expériences propose ces options pour demain. Préférez-vous une option privée ou partagée ?"]
       ],
       cards: [
         ["WhatsApp natif", "Conversations simples cote client et riches cote operations."],

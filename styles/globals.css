@@ -55,16 +55,21 @@ main {
   overflow: hidden;
 }
 
+section[id] {
+  scroll-margin-top: 108px;
+}
+
 ::selection {
   background: rgba(31, 199, 161, 0.28);
 }
 
 .site-nav {
   align-items: center;
-  backdrop-filter: blur(22px);
-  background: rgba(247, 249, 248, 0.82);
-  border: 1px solid rgba(220, 229, 223, 0.78);
+  backdrop-filter: blur(24px) saturate(135%);
+  background: rgba(247, 249, 248, 0.94);
+  border: 1px solid rgba(220, 229, 223, 0.92);
   border-radius: 999px;
+  box-shadow: 0 18px 60px rgba(14, 20, 31, 0.14);
   display: grid;
   gap: 18px;
   grid-template-columns: auto 1fr auto auto auto;
@@ -72,10 +77,10 @@ main {
   max-width: 1180px;
   padding: 10px 12px 10px 14px;
   position: fixed;
-  top: 18px;
+  top: 16px;
   transform: translateX(-50%);
   width: calc(100% - 32px);
-  z-index: 50;
+  z-index: 100;
 }
 
 .brand {
@@ -909,16 +914,21 @@ main {
 
 .live-card {
   animation: liveFloat 6.5s ease-in-out infinite;
-  backdrop-filter: blur(20px);
-  background: rgba(255, 255, 255, 0.13);
-  border: 1px solid rgba(255, 255, 255, 0.17);
+  backdrop-filter: blur(22px) saturate(150%);
+  background:
+    linear-gradient(145deg, rgba(16, 24, 36, 0.96), rgba(8, 11, 18, 0.88)),
+    rgba(8, 11, 18, 0.94);
+  border: 1px solid rgba(255, 255, 255, 0.18);
   border-radius: 16px;
-  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.28);
+  box-shadow:
+    0 24px 70px rgba(0, 0, 0, 0.38),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
   color: white;
   display: grid;
-  gap: 8px;
-  max-width: 230px;
-  padding: 13px;
+  gap: 9px;
+  max-width: 248px;
+  min-width: 214px;
+  padding: 14px;
   position: absolute;
 }
 
@@ -930,13 +940,14 @@ main {
 }
 
 .live-card-top {
-  color: rgba(255, 255, 255, 0.6);
+  color: rgba(255, 255, 255, 0.72);
   font-size: 12px;
 }
 
 .live-card strong {
+  color: rgba(255, 255, 255, 0.96);
   font-size: 14px;
-  line-height: 1.25;
+  line-height: 1.28;
 }
 
 .live-card-bottom span,
@@ -947,13 +958,14 @@ main {
 }
 
 .live-card-bottom span {
-  color: rgba(255, 255, 255, 0.62);
+  color: rgba(255, 255, 255, 0.72);
 }
 
 .live-card-bottom em {
-  background: rgba(255, 255, 255, 0.12);
+  background: rgba(31, 199, 161, 0.14);
+  border: 1px solid rgba(31, 199, 161, 0.22);
   border-radius: 999px;
-  color: rgba(255, 255, 255, 0.9);
+  color: #bff8ec;
   padding: 5px 7px;
 }
 
@@ -966,32 +978,32 @@ main {
 }
 
 .live-card-1 {
-  left: -44px;
-  top: 58px;
+  left: -28px;
+  top: 52px;
 }
 
 .live-card-2 {
   animation-delay: 420ms;
-  right: -34px;
-  top: 118px;
+  right: -22px;
+  top: 112px;
 }
 
 .live-card-3 {
   animation-delay: 920ms;
-  left: 18px;
-  top: 332px;
+  left: 10px;
+  top: 340px;
 }
 
 .live-card-4 {
   animation-delay: 1380ms;
-  bottom: 80px;
-  right: -16px;
+  bottom: 96px;
+  right: 6px;
 }
 
 .live-card-5 {
   animation-delay: 1840ms;
   bottom: 28px;
-  left: 114px;
+  left: 96px;
 }
 
 .live-card-6,
@@ -1594,6 +1606,7 @@ main {
 .metric-card strong {
   display: block;
   font-size: 20px;
+  line-height: 1.16;
   margin-top: 24px;
 }
 

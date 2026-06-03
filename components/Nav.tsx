@@ -1,8 +1,10 @@
 "use client";
 
 import { ArrowRight, Menu } from "lucide-react";
+import { useState } from "react";
 
 import { useLanguage } from "@/components/LanguageProvider";
+import { BrandLockup } from "@/components/Logo";
 import { type Locale, locales, getNavItems } from "@/lib/translations";
 
 function LanguageSelector({ compact = false }: { compact?: boolean }) {
@@ -28,15 +30,13 @@ function LanguageSelector({ compact = false }: { compact?: boolean }) {
 export function Nav() {
   const { t } = useLanguage();
   const navItems = getNavItems(t);
+  const [mobileOpen, setMobileOpen] = useState(false);
+  const closeMobileMenu = () => setMobileOpen(false);
 
   return (
     <header className="site-nav">
       <a className="brand" href="#home" aria-label="Staynex home">
-        <span className="brand-mark">S</span>
-        <span>
-          <strong>Staynex</strong>
-          <small>{t.meta.descriptor}</small>
-        </span>
+        <BrandLockup descriptor={t.meta.descriptor} />
       </a>
 
       <nav className="nav-links" aria-label="Main navigation">
@@ -49,26 +49,29 @@ export function Nav() {
 
       <LanguageSelector />
 
-      <a className="nav-cta" href="#demo">
+      <a className="nav-cta" href="#request-demo">
         {t.nav.requestDemo}
         <ArrowRight aria-hidden="true" />
       </a>
 
-      <details className="mobile-menu">
+      <details
+        className="mobile-menu"
+        onToggle={(event) => setMobileOpen(event.currentTarget.open)}
+        open={mobileOpen}
+      >
         <summary aria-label={t.nav.open}>
           <Menu aria-hidden="true" />
         </summary>
         <div>
-          {navItems.map((item) => (
-            <a key={item.href} href={item.href}>
+          {navItems.slice(0, 6).map((item) => (
+            <a key={item.href} href={item.href} onClick={closeMobileMenu}>
               {item.label}
             </a>
           ))}
-          <a className="mobile-demo-link" href="#demo">
+          <a className="mobile-demo-link" href="#request-demo" onClick={closeMobileMenu}>
             {t.nav.requestDemo}
             <ArrowRight aria-hidden="true" />
           </a>
-          <LanguageSelector compact />
         </div>
       </details>
     </header>

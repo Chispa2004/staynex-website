@@ -1,6 +1,7 @@
 "use client";
 
 import { useLanguage } from "@/components/LanguageProvider";
+import { BrandLockup } from "@/components/Logo";
 import { getNavItems } from "@/lib/translations";
 
 export function Footer() {
@@ -13,11 +14,7 @@ export function Footer() {
     <footer className="site-footer">
       <div>
         <a className="brand" href="#home" aria-label="Staynex home">
-          <span className="brand-mark">S</span>
-          <span>
-            <strong>Staynex</strong>
-            <small>{t.meta.descriptor}</small>
-          </span>
+          <BrandLockup descriptor={t.meta.descriptor} />
         </a>
         <p>{t.footer.body}</p>
       </div>

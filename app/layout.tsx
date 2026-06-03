@@ -25,14 +25,30 @@ export const metadata: Metadata = {
       "AI operations platform for hotels: guest communication, reception workflows, WhatsApp AI, provider bookings, revenue opportunities and hotel health monitoring.",
     url: "https://staynex.ai",
     siteName: "Staynex",
-    type: "website"
+    type: "website",
+    images: [
+      {
+        url: "/og-image.svg",
+        width: 1200,
+        height: 630,
+        alt: "Staynex AI Hospitality Operations Platform"
+      }
+    ]
+  },
+  icons: {
+    icon: [
+      { url: "/icon.svg", type: "image/svg+xml" },
+      { url: "/favicon.svg", type: "image/svg+xml" }
+    ],
+    shortcut: "/favicon.svg",
+    apple: [{ url: "/apple-icon.svg", type: "image/svg+xml" }]
   }
 };
 
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
-  themeColor: "#080b12"
+  themeColor: "#2864ff"
 };
 
 export default function RootLayout({ children }: { children: ReactNode }) {

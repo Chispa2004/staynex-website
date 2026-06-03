@@ -20,6 +20,7 @@ import {
 
 import { IconBadge } from "@/components/IconBadge";
 import { useLanguage } from "@/components/LanguageProvider";
+import { StaynexMark } from "@/components/Logo";
 import { SectionHeader } from "@/components/SectionHeader";
 
 const receptionIcons = [CalendarClock, UserRoundCheck, ClipboardCheck, ShieldCheck];
@@ -559,6 +560,7 @@ export function FinalCtaSection() {
 
   return (
     <section className="final-cta section-shell">
+      <StaynexMark className="final-cta-mark" />
       <p className="eyebrow">{t.finalCta.eyebrow}</p>
       <h2>{t.finalCta.title}</h2>
       <p>{t.finalCta.body}</p>

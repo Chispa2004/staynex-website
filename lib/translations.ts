@@ -55,35 +55,46 @@ const es = {
   "journey": {
     "eyebrow": "Una relación que continúa",
     "title": "Antes, durante y después.",
-    "body": "El acompañamiento se adapta al momento del huésped y a lo que tu hotel puede ofrecer.",
+    "body": "Una atención que acompaña al huésped en cada etapa.",
     "cards": [
       {
-        "title": "Antes de llegar",
-        "body": "Ayuda con dudas, preparativos y servicios para la llegada. El huésped puede compartir lo que necesita y llegar mejor orientado."
+        "phase": "Antes de la llegada",
+        "title": "La bienvenida empieza antes de llegar.",
+        "body": "Ayuda al huésped a resolver dudas, preparar su llegada y conocer los servicios del hotel.",
+        "tags": ["Llegada", "Traslados", "Servicios", "WhatsApp"],
+        "question": "Llegaremos por la noche. ¿Cómo podemos organizar la llegada?",
+        "answer": "¿A qué hora tenéis previsto llegar? Os orientamos con las indicaciones del hotel.",
+        "flow": ["Consulta", "Información del hotel", "Preparativos"]
       },
       {
-        "title": "Durante la estancia",
-        "body": "Resuelve consultas habituales y facilita que las peticiones lleguen al equipo adecuado, con el contexto necesario para atenderlas."
+        "phase": "Durante la estancia",
+        "title": "Cada petición, en buenas manos.",
+        "body": "Resuelve consultas habituales y organiza las solicitudes para que el equipo adecuado pueda atenderlas con contexto.",
+        "tags": ["Consultas", "Limpieza", "Mantenimiento", "Atención humana"],
+        "question": "¿Podéis traernos dos toallas?",
+        "answer": "Claro, hemos anotado dos toallas para vuestra habitación.",
+        "flow": ["Petición", "Solicitud registrada", "Equipo del hotel"]
       },
       {
-        "title": "Después de la visita",
-        "body": "Mantiene abierta la relación para próximas consultas y nuevas estancias, cuando el canal, los datos disponibles y los permisos lo permiten."
+        "phase": "Después de la visita",
+        "title": "La relación continúa después de la despedida.",
+        "body": "Facilita las consultas posteriores y acompaña el interés del huésped por volver a alojarse.",
+        "tags": ["Consultas", "Objetos olvidados", "Próxima estancia"],
+        "question": "Nos gustaría volver en noviembre.",
+        "answer": "¡Nos encantará volver a recibiros! ¿Qué fechas tenéis en mente?",
+        "flow": ["Conversación", "Nueva consulta", "Próxima visita"]
       }
     ]
   },
   "team": {
     "eyebrow": "IA y equipo, trabajando juntos",
-    "title": "La atención sigue siendo humana.",
-    "paragraphs": [
-      "La IA ayuda con las consultas habituales y la información del hotel.",
-      "Las solicitudes que requieren actuación llegan al equipo; las personas aportan criterio y atención donde más importa.",
-      "El hotel mantiene el control de cómo atiende y de cuándo interviene su personal."
-    ],
-    "connection": "Conectamos Hospedios con la información y los sistemas de tu hotel, según sus posibilidades de integración.",
-    "labels": [
-      "Escuchar",
-      "Dar contexto",
-      "Atender"
+    "title": "Conversaciones cercanas. Un equipo con el control.",
+    "chat": ["Viajamos con niños. ¿Qué podemos hacer por la tarde?", "¿Preferís un paseo tranquilo o una actividad al aire libre?", "Algo al aire libre.", "Podemos orientaros con las experiencias recomendadas por el hotel."],
+    "cards": [
+      {"title": "Por WhatsApp", "body": "Un canal familiar para preguntar y compartir lo que necesita."},
+      {"title": "En su idioma", "body": "Una atención más sencilla para huéspedes de distintos países."},
+      {"title": "Atención con IA", "body": "Ayuda con las consultas habituales y orienta al huésped cuando necesita al equipo."},
+      {"title": "El equipo toma el relevo", "body": "Las personas intervienen con el contexto de la conversación."}
     ]
   },
   "form": {
@@ -175,35 +186,46 @@ const en: Copy = {
   "journey": {
     "eyebrow": "A relationship that continues",
     "title": "Before, during and after.",
-    "body": "Support that adapts to each guest's moment and what your hotel can offer.",
+    "body": "Care that supports guests at every stage.",
     "cards": [
       {
-        "title": "Before arrival",
-        "body": "Help with questions, preparations and arrival services. Guests can share what they need and arrive better informed."
+        "phase": "Before arrival",
+        "title": "A warm welcome starts before arrival.",
+        "body": "Help guests find answers, prepare for their arrival and discover the hotel’s services.",
+        "tags": ["Arrival", "Transfers", "Services", "WhatsApp"],
+        "question": "We’ll be arriving at night. How can we plan our arrival?",
+        "answer": "What time do you expect to arrive? We can guide you using the hotel’s arrival information.",
+        "flow": ["Question", "Hotel information", "Preparations"]
       },
       {
-        "title": "During the stay",
-        "body": "Answer everyday questions and help requests reach the right team, with the context needed to handle them."
+        "phase": "During the stay",
+        "title": "Every request, in good hands.",
+        "body": "Answer everyday questions and organise requests so the right team can handle them with context.",
+        "tags": ["Questions", "Housekeeping", "Maintenance", "Personal care"],
+        "question": "Could you bring us two towels?",
+        "answer": "Of course, we’ve noted a request for two towels for your room.",
+        "flow": ["Request", "Request recorded", "Hotel team"]
       },
       {
-        "title": "After the visit",
-        "body": "Keep the relationship open for future questions and stays, where the channel, available data and permissions allow."
+        "phase": "After the visit",
+        "title": "The relationship continues after goodbye.",
+        "body": "Help with follow-up questions and support guests who would like to stay again.",
+        "tags": ["Questions", "Lost property", "Next stay"],
+        "question": "We’d like to come back in November.",
+        "answer": "We’d love to welcome you back! What dates do you have in mind?",
+        "flow": ["Conversation", "New enquiry", "Next visit"]
       }
     ]
   },
   "team": {
     "eyebrow": "AI and your team, working together",
-    "title": "Care remains human.",
-    "paragraphs": [
-      "AI helps with everyday questions and hotel information.",
-      "Requests that need action reach the team; people bring judgement and personal care where it matters most.",
-      "The hotel stays in control of its service and when staff step in."
-    ],
-    "connection": "We connect Hospedios with your hotel's information and systems, according to their integration capabilities.",
-    "labels": [
-      "Listen",
-      "Add context",
-      "Care"
+    "title": "Friendly conversations. Your team in control.",
+    "chat": ["We’re travelling with children. What could we do this afternoon?", "Would you prefer a gentle walk or an outdoor activity?", "Something outdoors.", "We can guide you through experiences recommended by the hotel."],
+    "cards": [
+      {"title": "On WhatsApp", "body": "A familiar channel for guests to ask questions and share what they need."},
+      {"title": "In their language", "body": "Simpler communication for guests from different countries."},
+      {"title": "AI-assisted care", "body": "Help with everyday questions and guidance when guests need the team."},
+      {"title": "The team takes over", "body": "People step in with the context of the conversation."}
     ]
   },
   "form": {
@@ -294,35 +316,46 @@ const fr: Copy = {
   "journey": {
     "eyebrow": "Une relation qui se poursuit",
     "title": "Avant, pendant et après.",
-    "body": "Un accompagnement adapté au moment du client et à ce que votre hôtel peut proposer.",
+    "body": "Une attention qui accompagne le client à chaque étape.",
     "cards": [
       {
-        "title": "Avant l’arrivée",
-        "body": "Aider à préparer le séjour et répondre aux questions sur les services d’arrivée. Le client peut partager ses besoins et arriver mieux informé."
+        "phase": "Avant l’arrivée",
+        "title": "L’accueil commence avant l’arrivée.",
+        "body": "Aidez le client à trouver des réponses, à préparer son arrivée et à découvrir les services de l’hôtel.",
+        "tags": ["Arrivée", "Transferts", "Services", "WhatsApp"],
+        "question": "Nous arriverons de nuit. Comment organiser notre arrivée ?",
+        "answer": "À quelle heure pensez-vous arriver ? Nous vous guiderons avec les indications de l’hôtel.",
+        "flow": ["Question", "Informations de l’hôtel", "Préparatifs"]
       },
       {
-        "title": "Pendant le séjour",
-        "body": "Répondre aux questions courantes et faciliter la transmission des demandes à la bonne équipe, avec le contexte nécessaire."
+        "phase": "Pendant le séjour",
+        "title": "Chaque demande, entre de bonnes mains.",
+        "body": "Répondez aux questions courantes et organisez les demandes pour que la bonne équipe puisse les traiter avec le contexte nécessaire.",
+        "tags": ["Questions", "Ménage", "Maintenance", "Attention humaine"],
+        "question": "Pourriez-vous nous apporter deux serviettes ?",
+        "answer": "Bien sûr, nous avons noté une demande de deux serviettes pour votre chambre.",
+        "flow": ["Demande", "Demande enregistrée", "Équipe de l’hôtel"]
       },
       {
-        "title": "Après la visite",
-        "body": "Garder la relation ouverte pour de prochaines questions et séjours, lorsque le canal, les données disponibles et les autorisations le permettent."
+        "phase": "Après la visite",
+        "title": "La relation se poursuit après le départ.",
+        "body": "Facilitez les échanges après le séjour et accompagnez les clients qui souhaitent revenir.",
+        "tags": ["Questions", "Objets oubliés", "Prochain séjour"],
+        "question": "Nous aimerions revenir en novembre.",
+        "answer": "Nous serions ravis de vous accueillir à nouveau ! À quelles dates pensez-vous ?",
+        "flow": ["Conversation", "Nouvelle question", "Prochaine visite"]
       }
     ]
   },
   "team": {
     "eyebrow": "L’IA et l’équipe, ensemble",
-    "title": "L’attention reste humaine.",
-    "paragraphs": [
-      "L’IA aide à répondre aux questions courantes sur l’hôtel.",
-      "Les demandes nécessitant une intervention arrivent à l’équipe ; les personnes apportent leur jugement et leur attention.",
-      "L’hôtel garde le contrôle de son accueil et de l’intervention de son personnel."
-    ],
-    "connection": "Nous relions Hospedios aux informations et systèmes de votre hôtel, selon leurs possibilités d’intégration.",
-    "labels": [
-      "Écouter",
-      "Comprendre",
-      "Accompagner"
+    "title": "Des échanges chaleureux. Une équipe qui garde la main.",
+    "chat": ["Nous voyageons avec des enfants. Que pouvons-nous faire cet après-midi ?", "Préférez-vous une promenade tranquille ou une activité en plein air ?", "Quelque chose en plein air.", "Nous pouvons vous orienter vers les expériences recommandées par l’hôtel."],
+    "cards": [
+      {"title": "Sur WhatsApp", "body": "Un canal familier pour poser des questions et partager ses besoins."},
+      {"title": "Dans sa langue", "body": "Des échanges plus simples pour les clients de différents pays."},
+      {"title": "Une attention avec l’IA", "body": "Une aide pour les questions courantes et une orientation vers l’équipe lorsque le client en a besoin."},
+      {"title": "L’équipe prend le relais", "body": "Les personnes interviennent avec le contexte de la conversation."}
     ]
   },
   "form": {

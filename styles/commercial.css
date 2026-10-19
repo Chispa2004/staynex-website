@@ -111,3 +111,70 @@ main { overflow: clip; }
 @media (min-width:1121px) { .commercial-mobile-menu {display:none !important;} }
 
 .demo-form button[aria-disabled="true"] { opacity: .65; cursor: not-allowed; }
+
+/* Reuse the original story/WhatsApp compositions with concise, static examples. */
+.hospitality-journeys .story-grid {margin-top:32px;gap:24px;}
+.hospitality-journeys .story-card {grid-template-columns:repeat(2,minmax(0,1fr));min-height:0;padding:28px;gap:36px;box-shadow:0 12px 36px #0e141f08;}
+.hospitality-journeys .story-copy {padding:8px 16px;min-width:0;}
+.hospitality-journeys .story-card:nth-child(even) .story-copy {order:0;grid-column:2;grid-row:1;}
+.hospitality-journeys .story-card:nth-child(even) .journey-visual {grid-column:1;grid-row:1;}
+.hospitality-journeys .story-index {font-size:64px;font-weight:750;display:block;margin-bottom:12px;}
+.hospitality-journeys .story-copy .eyebrow {font-size:12px;margin:0 0 14px;}
+.hospitality-journeys .story-copy h3 {font-size:clamp(28px,2.6vw,34px);line-height:1.16;letter-spacing:-.8px;}
+.hospitality-journeys .story-copy > p:not(.eyebrow) {font-size:16px;line-height:1.7;margin:18px 0;}
+.phase-tags {display:flex;flex-wrap:wrap;gap:8px;list-style:none;margin:20px 0 0;padding:0;}
+.phase-tags li {font-size:12px;font-weight:600;color:#344d43;background:#e6eeeb;border:1px solid #d3e1d9;border-radius:999px;padding:7px 11px;}
+.hospitality-journeys .journey-visual {display:grid;align-content:center;gap:16px;min-height:0;margin:0;padding:24px;overflow:visible;}
+.hospitality-journeys .journey-visual::before {border-radius:inherit;}
+.hospitality-journeys figcaption,.hospitality-team figcaption {position:relative;color:#b8c9cc;font-size:11px;letter-spacing:.7px;text-transform:uppercase;margin:0;line-height:1.5;}
+.hospitality-journeys .journey-phone {width:100%;max-width:380px;padding:16px;background:#1e303b;box-shadow:0 12px 28px #0002;}
+.illustration-brand {display:flex;align-items:center;gap:10px;color:#f7faf9;margin-bottom:16px;}
+.illustration-brand > span {display:grid;place-items:center;background:#2864ff;border-radius:10px;width:32px;height:32px;font-size:22px;font-weight:800;flex-shrink:0;}
+.illustration-brand strong {font-size:15px;}
+.illustration-chat {display:flex;flex-direction:column;gap:12px;}
+.hospitality-journeys .bubble,.hospitality-team .bubble {font-size:15px;line-height:1.55;margin:0;padding:14px;max-width:94%;border-radius:14px;}
+.hospitality-journeys .bubble p,.hospitality-team .bubble p {margin:5px 0 0;}
+.speaker {display:block;font-size:11px;font-weight:750;letter-spacing:.2px;}
+.hospitality-journeys .journey-workflow {position:relative;inset:auto;display:flex;align-items:stretch;justify-self:end;width:100%;max-width:380px;gap:8px;margin:0;padding:12px;list-style:none;background:#18242e;box-shadow:0 12px 28px #0002;}
+.hospitality-journeys .journey-workflow li {display:flex;align-items:center;gap:8px;flex:1;min-width:0;color:#edf5f1;font-size:12px;line-height:1.5;}
+.hospitality-journeys .journey-workflow li span {overflow-wrap:anywhere;}
+.hospitality-journeys .journey-workflow svg {width:14px;height:14px;flex-shrink:0;color:#8dddc7;}
+.hospitality-team .whatsapp-grid {grid-template-columns:minmax(0,.95fr) minmax(0,1.3fr);gap:40px;margin-top:32px;}
+.hospitality-team .phone-frame {min-height:0;margin:0;padding:24px;background:#14242e;border:1px solid #273d49;border-radius:26px;box-shadow:0 16px 40px #0e141f12;}
+.hospitality-team .illustration-brand {margin-top:18px;}
+.hospitality-team .phone-chat {min-height:0;padding:0;background:none;gap:12px;border-radius:0;}
+.hospitality-team .capability-grid {gap:18px;grid-template-columns:repeat(2,minmax(0,1fr));}
+.hospitality-team .capability-card {min-height:0;height:100%;border-radius:20px;padding:28px;box-shadow:0 10px 28px #0e141f05;}
+.hospitality-team .capability-card svg {width:42px;height:42px;padding:9px;box-sizing:content-box;color:#123dba;background:#e8efff;border-radius:16px;margin:0 0 18px;}
+.hospitality-team .capability-card:nth-child(2) svg {color:#125b46;background:#dff8f0;}
+.hospitality-team .capability-card:nth-child(3) svg {color:#82591e;background:#fff3d6;}
+.hospitality-team .capability-card h3 {font-size:22px;line-height:1.25;letter-spacing:-.4px;margin:0 0 12px;}
+.hospitality-team .capability-card p {font-size:16px;line-height:1.65;margin:0;color:var(--muted);}
+@media(max-width:1000px) {
+ .hospitality-journeys .story-card {gap:20px;padding:20px;}
+ .hospitality-journeys .story-copy {padding:0;}
+ .hospitality-journeys .journey-visual {padding:18px;}
+ .hospitality-journeys .journey-workflow {flex-direction:column;}
+ .hospitality-journeys .journey-workflow li {gap:10px;}
+ .hospitality-journeys .journey-workflow li:first-child {padding-left:24px;}
+ .hospitality-journeys .journey-workflow svg {transform:rotate(90deg);}
+ .hospitality-team .whatsapp-grid {gap:24px;grid-template-columns:minmax(0,1fr) minmax(0,1fr);}
+ .hospitality-team .capability-grid {grid-template-columns:1fr;gap:12px;}
+ .hospitality-team .capability-card {padding:22px;}
+ .hospitality-team .capability-card svg {width:24px;height:24px;margin-bottom:12px;}
+}
+@media(max-width:760px) {
+ .hospitality-journeys .story-grid {gap:20px;margin-top:26px;}
+ .hospitality-journeys .story-card {grid-template-columns:1fr;padding:20px;gap:24px;border-radius:24px;}
+ .hospitality-journeys .story-card:nth-child(even) .story-copy,.hospitality-journeys .story-card:nth-child(even) .journey-visual {grid-column:auto;grid-row:auto;order:0;}
+ .hospitality-journeys .story-index {font-size:48px;margin-bottom:10px;}
+ .hospitality-journeys .story-copy h3 {font-size:28px;}
+ .hospitality-journeys .journey-visual {padding:16px;border-radius:18px;gap:14px;}
+ .hospitality-journeys .journey-phone {padding:12px;}
+ .hospitality-journeys .bubble,.hospitality-team .bubble {max-width:100%;font-size:15px;padding:12px;}
+ .hospitality-journeys .journey-workflow {font-size:13px;padding:14px;}
+ .hospitality-journeys .journey-workflow li {font-size:13px;}
+ .hospitality-team .whatsapp-grid {grid-template-columns:1fr;gap:24px;margin-top:26px;}
+ .hospitality-team .phone-frame {padding:20px;border-radius:22px;}
+ .hospitality-team .capability-card {padding:24px;}
+}

@@ -52,3 +52,6 @@ El texto principal en español se entrega en `docs/hospedios-commercial-copy-es.
 - Preview del código: https://staynex-website-948nu3bx4-staynex-s-projects.vercel.app/ — Vercel `4j47iqWX6yu4Mj9BJf2YeCCSooz3`, Ready, entorno Preview y origen `33b7dad`. Asignación de dominios personalizados omitida, como corresponde. La URL de rama se consulta desde la PR para el SHA documental más reciente.
 - Lectura de Preview: Hospedios, título, cinco secciones y anclas correctas; aviso de contacto no disponible. No se envía el formulario remoto. Los ensayos de errores/recepción simulada son locales, no evidencia de entrega real.
 - Main remoto se mantiene en `d6b6e1db025966dcf47f88b691e8ecfa64b43e07`; no se sustituye Production. La publicación comercial queda pendiente de aprobación expresa y resolución del contacto.
+
+## Continuación WEB 1.2
+El diagnóstico anterior corresponde al SHA be2f30e. La integración de contacto preparada posteriormente, todavía desactivada, y sus límites se documentan en [commercial-presentation-review.md](commercial-presentation-review.md). No se ha acreditado entrega real ni se ha activado el formulario.

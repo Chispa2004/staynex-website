@@ -1,27 +1,43 @@
 "use client";
-import { useRef, useState } from "react";
+import { useCallback,useEffect,useRef,useState } from "react";
 import { ArrowRight } from "lucide-react";
 import { useLanguage } from "@/components/LanguageProvider";
-import { validateRequest, limits, type Field, type FieldErrors } from "@/lib/presentation-request";
+import { ContactChallenge } from "./ContactChallenge";
+import { createSubmission,type SubmissionState } from "@/lib/contact-submission";
+import { validateRequest,limits,type Field,type FieldErrors } from "@/lib/presentation-request";
 export function PresentationForm() {
-  const {t}=useLanguage(); const [errors,setErrors]=useState<FieldErrors>({});
-  const [state,setState]=useState<"idle"|"sending"|"invalid"|"unavailable"|"error"|"success">("idle");
-  const busy=useRef(false); const form=useRef<HTMLFormElement>(null);
+  const {t,locale}=useLanguage();
+  const [errors,setErrors]=useState<FieldErrors>({});
+  const [state,setState]=useState<SubmissionState>("idle");
+  const [config,setConfig]=useState<{enabled:boolean;siteKey?:string;emailLink?:string}>({enabled:false});
+  const [checked,setChecked]=useState(false);
+  const [token,setToken]=useState("");const [attempt,setAttempt]=useState(0);
+  const challengeError=useCallback(()=>setState(previous=>previous==="idle"||previous==="challenge"?"challenge":previous),[]);
+  const form=useRef<HTMLFormElement>(null);
+  const submission=useRef<ReturnType<typeof createSubmission>|null>(null);
+  useEffect(()=>{
+    submission.current=createSubmission({storage:{getItem:key=>sessionStorage.getItem(key),setItem:(key,value)=>sessionStorage.setItem(key,value),removeItem:key=>sessionStorage.removeItem(key)},
+      id:()=>crypto.randomUUID(),onState:setState,transport:input=>fetch("/api/presentation-request",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(input),signal:AbortSignal.timeout(15000)})});
+    submission.current.restore();
+    const controller=new AbortController();
+    fetch("/api/presentation-request",{cache:"no-store",signal:AbortSignal.any([controller.signal,AbortSignal.timeout(6000)])}).then(async response=>{
+      const data=await response.json();
+      if(response.ok)setConfig({enabled:data.enabled===true&&typeof data.siteKey==="string"&&!!data.siteKey,siteKey:data.siteKey,
+        emailLink:typeof data.emailLink==="string"&&data.emailLink.startsWith("mailto:")?data.emailLink:undefined});
+    }).catch(()=>{/* Closed until configuration is known. */}).finally(()=>{if(!controller.signal.aborted)setChecked(true);});
+    return ()=>controller.abort();
+  },[]);
   async function submit(event:React.FormEvent<HTMLFormElement>) {
-    event.preventDefault();if(busy.current)return;
+    event.preventDefault();if(submission.current?.isLocked())return;
     const input=Object.fromEntries(new FormData(event.currentTarget));
     const validation=validateRequest(input);setErrors(validation.errors);
     if(Object.keys(validation.errors).length){setState("invalid");form.current?.querySelector<HTMLInputElement>('[name="'+Object.keys(validation.errors)[0]+'"]')?.focus();return;}
-    busy.current=true;setState("sending");
-    const controller=new AbortController();const timeout=setTimeout(()=>controller.abort(),12000);
-    try {
-      const response=await fetch("/api/presentation-request",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(input),signal:controller.signal});
-      const data=await response.json();
-      if(response.ok && data.ok===true && typeof data.receiptId==="string" && data.receiptId.trim()) setState("success");
-      else if(data.code==="unavailable")setState("unavailable");
-      else setState("error");
-    }catch{setState("error");}finally{clearTimeout(timeout);busy.current=false;}
+    if(!config.enabled){setState("unavailable");return;}
+    if(!token){setState("challenge");return;}
+    await submission.current?.submit({...input,challengeToken:token});
+    setToken("");setAttempt(value=>value+1);
   }
+  const locked=state==="sending"||state==="success"||state==="unconfirmed";
   return <form className="demo-form" ref={form} onSubmit={submit} noValidate aria-busy={state==="sending"}>
     {(["name","company","email","message"] as Field[]).map(key=><div className={key==="message"||key==="email"?"form-wide":""} key={key}>
       <label htmlFor={"contact-"+key}>{t.form[key]}</label>
@@ -31,8 +47,11 @@ export function PresentationForm() {
     </div>)}
     <div hidden aria-hidden="true"><label htmlFor="contact-website">Website</label><input id="contact-website" name="website" tabIndex={-1} autoComplete="off"/></div>
     <p id="contact-hint" className="form-hint form-wide">{t.form.hint}</p>
-    <button className="button button-primary form-wide" type="submit" disabled={state==="sending"}>{state==="sending"?t.form.sending:t.nav.requestDemo}<ArrowRight aria-hidden="true"/></button>
+    {checked&&!config.enabled&&<p className="contact-note form-wide">{t.form.unavailable}</p>}
+    {config.enabled&&config.siteKey&&!locked&&<div className="form-wide"><ContactChallenge siteKey={config.siteKey} language={locale} attempt={attempt} onToken={setToken} onError={challengeError}/></div>}
+    <button className="button button-primary form-wide" type="submit" disabled={!checked} aria-disabled={locked} aria-describedby="contact-status">{state==="sending"?t.form.sending:t.nav.requestDemo}<ArrowRight aria-hidden="true"/></button>
     <p className="form-hint form-wide">{t.form.privacy}</p>
-    <p role="status" aria-live="polite" className={"form-wide form-status "+(state==="success"?"form-success":"")}>{state==="idle"?"":state==="invalid"?t.form.invalid:state==="sending"?t.form.sending:state==="success"?t.form.success:state==="unavailable"?t.form.unavailable:t.form.error}</p>
+    <p id="contact-status" role="status" aria-live="polite" aria-atomic="true" className={"form-wide form-status "+(state==="success"?"form-success":"")}>{state==="idle"?"":t.form[state]}</p>
+    {config.emailLink&&state!=="unconfirmed"&&state!=="success"&&state!=="sending"&&<a className="form-wide" href={config.emailLink}>{t.form.openEmail}</a>}
   </form>;
 }

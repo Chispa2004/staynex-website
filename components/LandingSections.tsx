@@ -24,5 +24,5 @@ export function TeamSection() {
 }
 export function ContactSection() {
   const {t}=useLanguage();
-  return <section tabIndex={-1} id="request-demo" className="section-shell commercial-section request-demo-section"><div><SectionHeader {...t.form}/><p className="contact-note">{t.form.unavailable}</p></div><PresentationForm/></section>;
+  return <section tabIndex={-1} id="request-demo" className="section-shell commercial-section request-demo-section"><div><SectionHeader {...t.form}/></div><PresentationForm/></section>;
 }

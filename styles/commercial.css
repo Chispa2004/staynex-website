@@ -109,3 +109,5 @@ main { overflow: clip; }
 }
 
 @media (min-width:1121px) { .commercial-mobile-menu {display:none !important;} }
+
+.demo-form button[aria-disabled="true"] { opacity: .65; cursor: not-allowed; }

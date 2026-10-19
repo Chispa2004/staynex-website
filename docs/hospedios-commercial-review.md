@@ -41,6 +41,14 @@ El aviso visible explica que el envío no está disponible. El borrador no debe 
 - ES/EN/FR: cambio de idioma, `lang`, persistencia al recargar y móvil sin desbordamiento. Español inicial. Solo queda marca antigua visible en el correo existente, conservado deliberadamente. Metadatos y todas las anclas comprobados en DOM.
 - Contraste de colores cambiados comprobado numéricamente y foco visible en navegador. Inspección de árbol/DOM y teclado; no se ha hecho ensayo con lector de pantalla ni se declara accesibilidad completa.
 - Capturas locales en la carpeta hermana `evidence`: before/after-desktop.png, before/after-mobile.png, after-desktop-full.png, after-mobile-full.png y contact-unavailable-mobile.png. Son capturas reales del navegador; el antes es la web pública, el después el build local. No contienen datos operativos.
-- Workflow comercial añadido: test:contact, build, typecheck y diff. Su ejecución remota y el Preview se documentarán al preparar el borrador. No incluye secrets, SQL ni acceso a la aplicación operativa.
+- Workflow comercial añadido: test:contact, build, typecheck y diff. No incluye secrets, SQL ni acceso a la aplicación operativa.
 
 El texto principal en español se entrega en `docs/hospedios-commercial-copy-es.md` (documento completo: 387 palabras, incluidos títulos, CTA y nota de borrador). No se introducen porcentajes, clientes, integraciones certificadas ni promesas de operación autónoma.
+
+## Borrador y Preview
+- Código: `33b7dad21916ddca626225749d705a4b1210fd73`. Este cierre documental no cambia la implementación.
+- PR https://github.com/Chispa2004/staynex-website/pull/1, abierta en borrador, auto-merge nulo. No se hace merge.
+- CI de código https://github.com/Chispa2004/staynex-website/actions/runs/39237022935: verify SUCCESS; cuatro pruebas, build, tipos y diff ejecutados, ninguno omitido. Revisados también los logs.
+- Preview del código: https://staynex-website-948nu3bx4-staynex-s-projects.vercel.app/ — Vercel `4j47iqWX6yu4Mj9BJf2YeCCSooz3`, Ready, entorno Preview y origen `33b7dad`. Asignación de dominios personalizados omitida, como corresponde. La URL de rama se consulta desde la PR para el SHA documental más reciente.
+- Lectura de Preview: Hospedios, título, cinco secciones y anclas correctas; aviso de contacto no disponible. No se envía el formulario remoto. Los ensayos de errores/recepción simulada son locales, no evidencia de entrega real.
+- Main remoto se mantiene en `d6b6e1db025966dcf47f88b691e8ecfa64b43e07`; no se sustituye Production. La publicación comercial queda pendiente de aprobación expresa y resolución del contacto.

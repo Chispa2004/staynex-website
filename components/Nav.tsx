@@ -1,79 +1,23 @@
 "use client";
-
-import { ArrowRight, Menu } from "lucide-react";
-import { useState } from "react";
-
+import { ArrowRight, Menu, X } from "lucide-react";
+import { useRef, useState, useEffect } from "react";
 import { useLanguage } from "@/components/LanguageProvider";
 import { BrandLockup } from "@/components/Logo";
-import { type Locale, locales, getNavItems } from "@/lib/translations";
-
-function LanguageSelector({ compact = false }: { compact?: boolean }) {
-  const { locale, setLocale } = useLanguage();
-
-  return (
-    <div className={`language-switcher ${compact ? "language-switcher-compact" : ""}`} aria-label="Language selector">
-      {locales.map((item: Locale) => (
-        <button
-          aria-pressed={locale === item}
-          className={locale === item ? "is-active" : ""}
-          key={item}
-          onClick={() => setLocale(item)}
-          type="button"
-        >
-          {item.toUpperCase()}
-        </button>
-      ))}
-    </div>
-  );
-}
-
+import { locales, getNavItems } from "@/lib/translations";
 export function Nav() {
-  const { t } = useLanguage();
-  const navItems = getNavItems(t);
-  const [mobileOpen, setMobileOpen] = useState(false);
-  const closeMobileMenu = () => setMobileOpen(false);
-
-  return (
-    <header className="site-nav">
-      <a className="brand" href="#home" aria-label="Staynex home">
-        <BrandLockup descriptor={t.meta.descriptor} />
-      </a>
-
-      <nav className="nav-links" aria-label="Main navigation">
-        {navItems.slice(0, 6).map((item) => (
-          <a key={item.href} href={item.href}>
-            {item.label}
-          </a>
-        ))}
-      </nav>
-
-      <LanguageSelector />
-
-      <a className="nav-cta" href="#request-demo">
-        {t.nav.requestDemo}
-        <ArrowRight aria-hidden="true" />
-      </a>
-
-      <details
-        className="mobile-menu"
-        onToggle={(event) => setMobileOpen(event.currentTarget.open)}
-        open={mobileOpen}
-      >
-        <summary aria-label={t.nav.open}>
-          <Menu aria-hidden="true" />
-        </summary>
-        <div>
-          {navItems.slice(0, 6).map((item) => (
-            <a key={item.href} href={item.href} onClick={closeMobileMenu}>
-              {item.label}
-            </a>
-          ))}
-          <a className="mobile-demo-link" href="#request-demo" onClick={closeMobileMenu}>
-            {t.nav.requestDemo}
-            <ArrowRight aria-hidden="true" />
-          </a>
-        </div>
-      </details>
-    </header>
-  );
+  const {t,locale,setLocale}=useLanguage(); const items=getNavItems(t);
+  const [open,setOpen]=useState(false); const trigger=useRef<HTMLButtonElement>(null); const menu=useRef<HTMLElement>(null);
+  useEffect(()=>{
+    const closeOnOutside=(e:PointerEvent)=>{if(!menu.current?.contains(e.target as Node))setOpen(false);};
+    document.addEventListener("pointerdown",closeOnOutside);
+    return ()=>document.removeEventListener("pointerdown",closeOnOutside);
+  },[]);
+  return <><a className="skip-link" href="#content">{t.nav.skip}</a><header className="site-nav" ref={menu} onKeyDown={e=>{if(e.key==="Escape"&&open){e.stopPropagation();setOpen(false);trigger.current?.focus();}}}>
+    <a className="brand" href="#home" aria-label={t.nav.home}><BrandLockup descriptor={t.meta.descriptor}/></a>
+    <nav className="nav-links" aria-label={t.nav.main}>{items.map(x=><a href={x.href} key={x.href}>{x.label}</a>)}</nav>
+    <div className="language-switcher" aria-label={t.nav.language}>{locales.map(item=><button type="button" key={item} aria-pressed={locale===item} lang={item} onClick={()=>setLocale(item)} className={locale===item?"is-active":""}>{item.toUpperCase()}</button>)}</div>
+    <a className="nav-cta" href="#request-demo">{t.nav.requestDemo}<ArrowRight aria-hidden="true"/></a>
+    <button type="button" className="menu-toggle" ref={trigger} aria-label={open?t.nav.close:t.nav.open} aria-expanded={open} aria-controls="mobile-navigation" onClick={()=>setOpen(!open)}>{open?<X aria-hidden="true"/>:<Menu aria-hidden="true"/>}</button>
+    <nav id="mobile-navigation" hidden={!open} className="commercial-mobile-menu" aria-label={t.nav.main}>{[...items,{href:"#request-demo",label:t.nav.requestDemo}].map(x=><a key={x.href} href={x.href} onClick={()=>setOpen(false)}>{x.label}</a>)}</nav>
+  </header></>;
 }

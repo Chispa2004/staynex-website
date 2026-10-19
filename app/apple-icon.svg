@@ -1,13 +1,1 @@
-<svg width="180" height="180" viewBox="0 0 180 180" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <rect width="180" height="180" rx="38" fill="#08111F"/>
-  <path d="M90 18 147 51v66L90 150 33 117V51L90 18Z" fill="url(#g)"/>
-  <path d="M90 18 147 51v66L90 150 33 117V51L90 18Z" stroke="rgba(255,255,255,.35)" stroke-width="4"/>
-  <path d="M110.8 62.5c-5.4-5.2-12.7-8-21-8-14.2 0-24.1 7.3-24.1 17.9 0 11.6 10 15 22.4 17.7 10.8 2.3 14.8 4 14.8 8.9 0 4.8-4.8 7.8-12.7 7.8-8.9 0-15.8-3.2-21.6-9.2l-9.5 11c7.7 8.2 18.2 12.4 30.8 12.4 15.9 0 26.4-7.7 26.4-19.3 0-12.7-10.5-16.4-23.5-19-10-2.2-13.7-3.8-13.7-8.2 0-4 4-6.8 10.8-6.8 7.4 0 13.2 2.4 18.2 7.1l7.9-12.3Z" fill="white"/>
-  <defs>
-    <linearGradient id="g" x1="42" y1="30" x2="138" y2="144" gradientUnits="userSpaceOnUse">
-      <stop stop-color="#4C8DFF"/>
-      <stop offset=".56" stop-color="#2864FF"/>
-      <stop offset="1" stop-color="#123DBA"/>
-    </linearGradient>
-  </defs>
-</svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect width="64" height="64" rx="16" fill="#123dba"/><path d="M18 15h8v13h12V15h8v34h-8V36H26v13h-8z" fill="#fff"/></svg>

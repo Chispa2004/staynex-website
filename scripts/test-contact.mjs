@@ -6,7 +6,7 @@ const {contactConfig,contactMailto,sendPresentation}=await load('lib/contact-ser
 const {createSubmission,attemptStorageKey}=await load('lib/contact-submission.ts');
 const {POST,GET}=await load('app/api/presentation-request/route.ts');
 const valid={name:'Ana Sintética',company:'Hotel Ejemplo',email:'ana@example.invalid',message:'<script>not HTML</script>\nSegunda línea',operationId:'b1a93608-d601-4dba-89ad-d9017fb21fbd',challengeToken:'synthetic-token'};
-const env={CONTACT_ENABLED:'true',CONTACT_RECIPIENT_CONFIRMED:'true',CONTACT_PRIVACY_REVIEWED:'true',CONTACT_DEPLOYMENT_ENV:'preview',VERCEL_ENV:'preview',CONTACT_ORIGIN:'https://commercial.example.invalid',CONTACT_RESEND_API_KEY:'synthetic-secret',CONTACT_FROM:'from@example.invalid',CONTACT_TO:'to@example.invalid',CONTACT_TURNSTILE_SITE_KEY:'synthetic-site',CONTACT_TURNSTILE_SECRET_KEY:'synthetic-secret'};
+const env={CONTACT_MAILTO_ENABLED:'true',CONTACT_ENABLED:'true',CONTACT_RECIPIENT_CONFIRMED:'true',CONTACT_PRIVACY_REVIEWED:'true',CONTACT_DEPLOYMENT_ENV:'preview',VERCEL_ENV:'preview',CONTACT_ORIGIN:'https://commercial.example.invalid',CONTACT_RESEND_API_KEY:'synthetic-secret',CONTACT_FROM:'from@example.invalid',CONTACT_TO:'to@example.invalid',CONTACT_TURNSTILE_SITE_KEY:'synthetic-site',CONTACT_TURNSTILE_SECRET_KEY:'synthetic-secret'};
 const config=contactConfig(env);
 const json=(data,status=200)=>Response.json(data,{status});
 const proof={success:true,hostname:'commercial.example.invalid',action:'presentation'};
@@ -25,7 +25,7 @@ test('HTTP: origin, format, bounded body, absent configuration, GET exposes no s
  assert.equal((await POST(req('x'.repeat(17000)))).status,413);
  assert.equal((await POST(req('{}'))).status,422);
  const res=await POST(req(JSON.stringify(valid)));assert.equal(res.status,503);assert.equal(res.headers.get('cache-control'),'no-store');
- assert.deepEqual(await (await GET(new Request('https://commercial.example.invalid/api/presentation-request'))).json(),{enabled:false,siteKey:null,emailLink:null});
+ assert.deepEqual(await (await GET(new Request('https://commercial.example.invalid/api/presentation-request'))).json(),{enabled:false,siteKey:null,emailLink:null,recoveryLink:null});
 });
 test('invalid fields, types, limits and header injection never reach any transport',async()=>{
  for(const input of [{}, {...valid,name:'   '},{...valid,email:'bad'},{...valid,company:9},{...valid,message:'x'.repeat(2001)},{...valid,name:'Ana\r\nBcc: other'},{...valid,email:'a@b.test,c@d.test'},{...valid,email:'Ana <a@b.test>'},{...valid,email:'a@b.test\r\n'},{...valid,message:'a\x00b'}]){
@@ -99,7 +99,7 @@ test('denied session storage does not dispatch; success reload does not resubmit
 });
 
 test('mailto is absent until separately confirmed and explicitly enabled on the exact host',()=>{
- assert.equal(contactMailto(env,'commercial.example.invalid'),null);
+ assert.equal(contactMailto({...env,CONTACT_MAILTO_ENABLED:undefined},'commercial.example.invalid'),null);
  const enabled={...env,CONTACT_MAILTO_ENABLED:'true'};
  assert.ok(contactMailto(enabled,'commercial.example.invalid').startsWith('mailto:to%40example.invalid?subject='));
  assert.equal(contactMailto({...enabled,CONTACT_RECIPIENT_CONFIRMED:'false'},'commercial.example.invalid'),null);
@@ -111,9 +111,21 @@ test('configured real HTTP handler enforces exact origin and reaches only simula
  try{
   Object.assign(process.env,env);globalThis.fetch=fake.fetch;
   const get=await GET(new Request('https://commercial.example.invalid/api/presentation-request'));
-  assert.deepEqual(await get.json(),{enabled:true,siteKey:'synthetic-site',emailLink:null});
+  assert.deepEqual(await get.json(),{enabled:true,siteKey:'synthetic-site',emailLink:contactMailto(env,'commercial.example.invalid'),recoveryLink:contactMailto(env,'commercial.example.invalid',true)});
   const req=origin=>new Request('https://commercial.example.invalid/api/presentation-request',{method:'POST',headers:{origin,host:new URL(origin).host,'content-type':'application/json'},body:JSON.stringify(valid)});
   assert.equal((await POST(req('https://other.invalid'))).status,503);assert.equal(fake.calls.length,0);
   const response=await POST(req(env.CONTACT_ORIGIN));assert.equal(response.status,200);assert.equal((await response.json()).code,'accepted');assert.equal(fake.calls.length,2);
  }finally{globalThis.fetch=previousFetch;for(const [key,value] of Object.entries(snapshot)){if(value===undefined)delete process.env[key];else process.env[key]=value;}}
+});
+
+test('uncertain submission retains a manual recovery contact without expiry-based redispatch',async()=>{
+ const b=browser(async()=>{throw Error('lost response');});await b.controller.submit(valid);
+ const recovery=contactMailto(env,'commercial.example.invalid',true);
+ assert.ok(recovery.startsWith('mailto:to%40example.invalid?'));
+ assert.match(decodeURIComponent(recovery),/Consulta sobre una solicitud anterior/);
+ assert.ok(!recovery.includes('body=')); // No personal form data in the link.
+ const later=browser(never,b.store);later.controller.restore();await later.controller.submit({...valid,message:'changed'});
+ assert.deepEqual(later.states,['unconfirmed']); // No new identity, retry or timer unlock.
+ assert.equal(contactConfig({...env,CONTACT_MAILTO_ENABLED:'false'}),null);
+ assert.equal(contactMailto({...env,CONTACT_RECIPIENT_CONFIRMED:'false'},'commercial.example.invalid',true),null);
 });

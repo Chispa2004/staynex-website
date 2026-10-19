@@ -18,7 +18,7 @@ const server=createServer(async(req,res)=>{
  if(url.pathname==='/__fixture-widget.js'){res.setHeader('Content-Type','text/javascript');res.end(widget);return;}
  if(url.pathname==='/api/presentation-request'){
   res.setHeader('Content-Type','application/json');res.setHeader('Cache-Control','no-store');
-  if(req.method==='GET'){res.end(JSON.stringify({enabled:mode!=='unavailable',siteKey:'synthetic'}));return;}
+  if(req.method==='GET'){res.end(JSON.stringify({enabled:mode!=='unavailable',siteKey:'synthetic',recoveryLink:'mailto:recovery@example.invalid?subject=Consulta%20sobre%20una%20solicitud%20anterior'}));return;}
   let body='';for await(const chunk of req){body+=chunk;if(body.length>16384){res.writeHead(413).end();return;}}
   attempts++;
   const result=await sendPresentation(JSON.parse(body),mode==='unavailable'?null:config,async(url,options)=>{

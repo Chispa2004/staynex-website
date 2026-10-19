@@ -5,7 +5,7 @@ export async function GET(request:Request) {
   const config=contactConfig(process.env);
   const host=request.headers.get("host")||new URL(request.url).host;
   const enabled=!!config && new URL(config.origin).host===host;
-  return Response.json({enabled,siteKey:enabled?config!.siteKey:null,emailLink:contactMailto(process.env,host)},{headers:{"Cache-Control":"no-store"}});
+  return Response.json({enabled,siteKey:enabled?config!.siteKey:null,emailLink:contactMailto(process.env,host),recoveryLink:contactMailto(process.env,host,true)},{headers:{"Cache-Control":"no-store"}});
 }
 export async function POST(request:Request) {
   const headers={"Cache-Control":"no-store"};

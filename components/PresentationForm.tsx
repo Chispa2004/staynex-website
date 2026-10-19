@@ -9,7 +9,7 @@ export function PresentationForm() {
   const {t,locale}=useLanguage();
   const [errors,setErrors]=useState<FieldErrors>({});
   const [state,setState]=useState<SubmissionState>("idle");
-  const [config,setConfig]=useState<{enabled:boolean;siteKey?:string;emailLink?:string}>({enabled:false});
+  const [config,setConfig]=useState<{enabled:boolean;siteKey?:string;emailLink?:string;recoveryLink?:string}>({enabled:false});
   const [checked,setChecked]=useState(false);
   const [token,setToken]=useState("");const [attempt,setAttempt]=useState(0);
   const challengeError=useCallback(()=>setState(previous=>previous==="idle"||previous==="challenge"?"challenge":previous),[]);
@@ -22,7 +22,8 @@ export function PresentationForm() {
     const controller=new AbortController();
     fetch("/api/presentation-request",{cache:"no-store",signal:AbortSignal.any([controller.signal,AbortSignal.timeout(6000)])}).then(async response=>{
       const data=await response.json();
-      if(response.ok)setConfig({enabled:data.enabled===true&&typeof data.siteKey==="string"&&!!data.siteKey,siteKey:data.siteKey,
+      if(response.ok)setConfig({enabled:data.enabled===true&&typeof data.siteKey==="string"&&!!data.siteKey&&typeof data.recoveryLink==="string"&&data.recoveryLink.startsWith("mailto:"),siteKey:data.siteKey,
+        recoveryLink:typeof data.recoveryLink==="string"&&data.recoveryLink.startsWith("mailto:")?data.recoveryLink:undefined,
         emailLink:typeof data.emailLink==="string"&&data.emailLink.startsWith("mailto:")?data.emailLink:undefined});
     }).catch(()=>{/* Closed until configuration is known. */}).finally(()=>{if(!controller.signal.aborted)setChecked(true);});
     return ()=>controller.abort();
@@ -52,6 +53,7 @@ export function PresentationForm() {
     <button className="button button-primary form-wide" type="submit" disabled={!checked} aria-disabled={locked} aria-describedby="contact-status">{state==="sending"?t.form.sending:t.nav.requestDemo}<ArrowRight aria-hidden="true"/></button>
     <p className="form-hint form-wide">{t.form.privacy}</p>
     <p id="contact-status" role="status" aria-live="polite" aria-atomic="true" className={"form-wide form-status "+(state==="success"?"form-success":"")}>{state==="idle"?"":t.form[state]}</p>
+    {state==="unconfirmed"&&config.recoveryLink&&<div className="form-wide"><p className="form-hint">{t.form.recovery}</p><a href={config.recoveryLink}>{t.form.recoveryAction}</a></div>}
     {config.emailLink&&state!=="unconfirmed"&&state!=="success"&&state!=="sending"&&<a className="form-wide" href={config.emailLink}>{t.form.openEmail}</a>}
   </form>;
 }

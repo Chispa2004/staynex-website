@@ -2,17 +2,19 @@
 import { isMailbox, validateRequest, type RequestData } from "./presentation-request";
 
 type Env = Record<string,string|undefined>;
-export function contactMailto(env:Env,host:string):string|null {
+export function contactMailto(env:Env,host:string,recovery=false):string|null {
   if(env.CONTACT_MAILTO_ENABLED!=="true"||env.CONTACT_RECIPIENT_CONFIRMED!=="true"||env.CONTACT_PRIVACY_REVIEWED!=="true"||!env.CONTACT_TO||!isMailbox(env.CONTACT_TO)) return null;
   try {
     const origin=new URL(env.CONTACT_ORIGIN||"");
     if(origin.origin!==env.CONTACT_ORIGIN||origin.protocol!=="https:"||origin.host!==host||env.CONTACT_DEPLOYMENT_ENV!==(env.VERCEL_ENV||"development"))return null;
-    return `mailto:${encodeURIComponent(env.CONTACT_TO)}?subject=${encodeURIComponent("Hospedios — Solicitud de presentación")}`;
+    const subject=recovery?"Hospedios — Consulta sobre una solicitud anterior":"Hospedios — Solicitud de presentación";
+    return `mailto:${encodeURIComponent(env.CONTACT_TO)}?subject=${encodeURIComponent(subject)}`;
   }catch{return null;}
 }
 export type ContactConfig = { origin:string; hostname:string; apiKey:string; from:string; to:string; siteKey:string; challengeSecret:string };
 export function contactConfig(env:Env): ContactConfig|null {
-  if(env.CONTACT_ENABLED!=="true" || env.CONTACT_RECIPIENT_CONFIRMED!=="true" || env.CONTACT_PRIVACY_REVIEWED!=="true") return null;
+  // Activation requires a confirmed recovery contact; never strand an uncertain submission.
+  if(env.CONTACT_MAILTO_ENABLED!=="true" || env.CONTACT_ENABLED!=="true" || env.CONTACT_RECIPIENT_CONFIRMED!=="true" || env.CONTACT_PRIVACY_REVIEWED!=="true") return null;
   const { CONTACT_ORIGIN:origin, CONTACT_RESEND_API_KEY:apiKey, CONTACT_FROM:from, CONTACT_TO:to,
     CONTACT_TURNSTILE_SITE_KEY:siteKey, CONTACT_TURNSTILE_SECRET_KEY:challengeSecret }=env;
   if(!origin||!apiKey||!from||!to||!siteKey||!challengeSecret||!isMailbox(from)||!isMailbox(to)) return null;

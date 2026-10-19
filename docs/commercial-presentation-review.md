@@ -1,86 +1,61 @@
-# WEB 1.2 — Solicitud de presentación (19/10/2026)
+# WEB 1.2 — Contacto preparado para activación
 
-## Alcance y punto de partida
-Solo `staynex-website`, rama `codex/hospedios-commercial`, base revisada `be2f30e1b8cce8529e4ba5c433fc735a007f85f7`. PR #1 se mantiene en borrador, sin auto-merge. Main remoto sigue `d6b6e1db025966dcf47f88b691e8ecfa64b43e07`.
+Revisión posterior a `79edf29e5eb2f84757d0c283301808a6840db108`, 19/10/2026. Solo `staynex-website`, rama `codex/hospedios-commercial`, [PR #1](https://github.com/Chispa2004/staynex-website/pull/1) en borrador y sin auto-merge. No se publica Production ni se configura o envía correo. El informe editorial anterior se conserva en `hospedios-commercial-review.md`.
 
-Todos los CTA comerciales llegan a `#request-demo`. Se conservan las cinco secciones, Hospedios, ES/EN/FR, navegación y diseño. El formulario conserva nombre (100), hotel/empresa (160), correo (254) y mensaje opcional (2000). No existen base de datos, CRM, cola ni transporte previo de solicitudes en este repositorio. La entrega anterior devolvía 503 a toda petición válida.
+## Cambio acotado y recuperación
+Se mantienen diseño, cinco secciones, ES/EN/FR, validación de servidor, destinatario único de servidor, Reply-To del visitante, protección antiautomatización y ausencia de autorespuesta. Se simplifican los textos y se utiliza el enlace mailto ya preparado para ofrecer una consulta manual en caso de incertidumbre.
 
-Vercel comercial permite el handler Node de Next. Lectura de configuración: Production sigue main; Preview sigue otras ramas y no tiene dominios propios. Preview sin variables Project ni Shared vinculadas; Production sin variables Project. No se leen valores secretos ni se traslada infraestructura de la aplicación. Build y start no ejecutan envíos, migraciones ni configuración. CI usa exclusivamente dobles. Un push de esta rama solo crea Preview; no activa el transporte.
+El destinatario comercial ha sido confirmado expresamente por el usuario al inicio de su última instrucción. Se conserva la confirmación con la dirección únicamente en el registro privado ignorado por Git. No implica autorización para publicar la dirección, configurar servicios, probar envíos ni usar su dominio como remitente.
 
-## Implementación
-- `lib/contact-server.ts`: adaptador HTTP de Resend sin SDK adicional, exclusivamente servidor. Elegido por respuesta con identificador y soporte de idempotencia; no se afirma disponer de cuenta comercial autorizada, dominio, cuota ni credencial. Supabase Auth y su SMTP son independientes.
-- Destinatario único de servidor (`CONTACT_TO`), remitente autorizado fijo (`CONTACT_FROM`), visitante en `reply_to`. No hay CC, BCC, adjuntos, HTML, interpolación de cabeceras ni autorespuesta. Asunto fijo; cuerpo de texto plano. Los campos extra del visitante no controlan el sobre.
-- `lib/presentation-request.ts`: validación compartida cliente/servidor, tipos, límites, campos vacíos, buzón único y caracteres de control. Mensaje admite saltos de línea; nombre/empresa/email no admiten controles ni inyección de cabeceras.
-- Handler real: origen, contenido JSON, máximo 16 KiB incluso sin Content-Length. Origen configurado exacto y entorno de Vercel separados. GET solo revela disponibilidad, site key pública y mailto si está expresamente habilitado; nunca claves ni destinatario por defecto.
-- Turnstile propuesto, sin configurar: verificación obligatoria en servidor antes de Resend, hostname y action exactos, token de un uso y corta duración. Honeypot y tamaño/origen complementarios. No se finge un límite distribuido con un contador en memoria. La barrera no garantiza impedir todo abuso humano ni es un límite global de gasto; antes de abrir recepción pública se debe revisar cuota y protección de tráfico disponibles en las cuentas autorizadas.
-- Contacto desactivado salvo configuración completa y las tres confirmaciones explícitas de habilitación, destinatario y privacidad. Si falta algo no se carga Turnstile ni se llama a Resend. Configurar secretos por sí solo no activa el envío.
-- `lib/contact-submission.ts`: exclusión sincrónica del doble envío; ninguna repetición automática. Estado mínimo de intento en sessionStorage, sin campos personales. Se escribe antes de despachar. Ante pérdida de respuesta se bloquea también al recargar esa pestaña; si no puede guardar el marcador, no inicia envío. No es una deduplicación universal entre dispositivos o pestañas nuevas.
-- Resend recibe una clave estable por operación (`presentation/<UUID>`). La protección documentada del proveedor dura 24 horas, no indefinidamente. No se reintenta un resultado incierto, ni siquiera tras expirar esa ventana. Un rechazo acreditado permite un nuevo intento manual con comprobación de seguridad nueva.
-- Solo HTTP correcto + `id` de proveedor permiten el estado de aceptación. Timeout, 409, 5xx, JSON inválido o recibo incompleto quedan inciertos. Un fallo de comprobación de seguridad permite reintentar porque aún no se ha llamado al correo. No se registran cuerpos, direcciones, credenciales ni respuestas del proveedor en logs de aplicación.
-- `ContactChallenge` se carga únicamente si todo el servidor está preparado. La prueba del widget real queda pendiente de configuración; el laboratorio usa un control claramente simulado.
-- `PresentationForm` conserva campos ante rechazo/timeout, errores asociados y foco en el primer campo inválido, estados accesibles traducidos. El botón mantiene el foco con aria-disabled y bloqueo lógico durante/tras el envío. Puede salirse con Tab. No se vacía el formulario al recibir respuesta. Al recargar no se conservan los campos personales, sí el bloqueo preventivo del intento.
-- Alternativa mailto preparada con `CONTACT_MAILTO_ENABLED=false`. Requiere destinatario confirmado, revisión de privacidad y origen/entorno exactos. Etiqueta: «Abrir mi programa de correo (no envía la solicitud automáticamente)». No rellena datos personales ni aparece tras aceptación/incertidumbre. Publicar el destinatario en ese enlace requiere autorización específica; no se ha publicado la dirección propuesta.
+En un resultado incierto aparece **«Consultar mi solicitud por correo»**, con asunto «Hospedios — Consulta sobre una solicitud anterior». Abre el programa de correo, no envía nada ni rellena los datos del formulario. Su finalidad es consultar el intento anterior, no repetir la solicitud comercial. El usuario puede pasar con Tab del botón bloqueado a esta salida. No se abandona al visitante a una espera sin acción.
 
-## Configuración pendiente (ningún valor remoto cambiado)
-`.env.example` contiene solo nombres y valores desactivados/vacíos:
+El formulario solo puede activarse si el contacto alternativo está habilitado y confirmado (`CONTACT_MAILTO_ENABLED`, además de los controles previos de entorno, origen y privacidad). El cliente también exige ese enlace antes de permitir enviar. Ahora todo continúa desactivado y la dirección real no está en código, documentación pública ni Preview.
 
-| Variable | Requisito antes de activar |
-|---|---|
-| CONTACT_ENABLED | `true` solo después de aprobar la activación concreta |
-| CONTACT_RECIPIENT_CONFIRMED | Confirmación específica del destinatario comercial |
-| CONTACT_PRIVACY_REVIEWED | Información de tratamiento y responsable revisada/publicada |
-| CONTACT_DEPLOYMENT_ENV | Debe coincidir con VERCEL_ENV; Preview y Production no son intercambiables |
-| CONTACT_ORIGIN | Origen HTTPS exacto del entorno autorizado |
-| CONTACT_RESEND_API_KEY | Credencial comercial dedicada, alcance mínimo de envío, nunca copiada desde la aplicación |
-| CONTACT_FROM | Un buzón remitente del dominio verificado y autorizado en Resend |
-| CONTACT_TO | Un único destinatario aprobado, fijado en servidor |
-| CONTACT_TURNSTILE_SITE_KEY | Clave pública para ese hostname |
-| CONTACT_TURNSTILE_SECRET_KEY | Secreto de validación exclusivamente servidor |
-| CONTACT_MAILTO_ENABLED | Alternativa opcional y separada, false por defecto |
+No se desbloquea automáticamente el envío original por el paso del tiempo, ni se cambia su identidad. El enlace de consulta funciona también después de recargar y no depende de la ventana de idempotencia. El formulario no reenvía tras la consulta manual; cualquier nuevo intento debe seguir a la comprobación humana de la situación. Los campos permanecen ante error, aunque no se guardan datos personales para sobrevivir a una recarga. El marcador de intento en sessionStorage solo contiene el estado.
 
-No se ha acreditado autorización de transporte comercial, remitente verificado o cuota/plan utilizable sin coste. No se crean cuentas ni servicios ni se envía correo. El correo propuesto por el usuario sigue pendiente de confirmación comercial; no se incluye su dirección en archivos públicos.
+Se conserva la clave por operación del adaptador. [Resend limita su idempotencia a 24 horas](https://resend.com/docs/dashboard/emails/idempotency-keys); no se considera deduplicación indefinida ni se usa como garantía para un reintento tardío. En esta implementación no existe consulta fiable del resultado por identidad de operación cuando se pierde el recibo: no se inventa un endpoint, una consulta de estado ni un resultado de entrega. La vía elegida es consulta humana, no reintento de la API.
 
-Privacidad: se conserva el aviso de datos profesionales y no marketing. No había páginas legales funcionales enlazadas: el antiguo texto era un placeholder. Siguen faltando identidad y contacto del responsable, información aprobada de tratamiento/conservación/derechos y proveedores. No se inventa ni se sustituye una razón social. La revisión es una condición para activar, no una certificación legal. Se conserva el enlace anterior `hello@staynex.ai`, sin acreditar su entrega ni usarlo como receptor del formulario.
+El receptor de la consulta deberá revisar el registro privado del proveedor y su buzón. La ausencia en el buzón no prueba que el proveedor rechazara el envío. Si no puede aclararlo, debe mantener el resultado como incierto. La apertura de mailto y la aceptación del proveedor tampoco acreditan entrega o lectura.
 
-## Pruebas y evidencias
-`npm run test:contact`: 12 grupos, todo PASS. Ejecutan validadores, controlador real de envío, handler HTTP real y adaptador con fetch simulado. Cubren origen, JSON/tamaño/tipos/longitudes, configuración ausente/incompleta, entorno incorrecto, manipulación de sobre/cabeceras, honeypot, tokens inválidos/repetidos/de otro host/acción, aceptación y recibo, rechazo, rate limit del proveedor, timeout/5xx/409/respuesta malformada, doble activación, recuperación manual, bloqueo al recargar y almacenamiento inaccesible. Ninguna conexión a proveedores.
+## Textos finales
+| Estado | Español | English | Français |
+|---|---|---|---|
+| Aceptación del proveedor con recibo | Tu solicitud se ha enviado. Gracias por tu interés en Hospedios. | Your request has been sent. Thank you for your interest in Hospedios. | Votre demande a été envoyée. Merci de votre intérêt pour Hospedios. |
+| Rechazo acreditado | No hemos podido enviar tu solicitud. Tus datos siguen en el formulario para que puedas intentarlo de nuevo. | We couldn’t send your request. Your details are still in the form so you can try again. | Nous n’avons pas pu envoyer votre demande. Vos informations sont conservées dans le formulaire pour que vous puissiez réessayer. |
+| Resultado incierto | No hemos podido confirmar el envío. Para evitar duplicados, espera antes de intentarlo de nuevo. | We couldn’t confirm whether your request was sent. To avoid duplicates, please wait before trying again. | Nous n’avons pas pu confirmer l’envoi. Pour éviter les doublons, patientez avant de réessayer. |
 
-Build, TypeScript y diff --check: PASS. Advertencia de Node sobre stripTypeScriptTypes experimental; no es fallo. Sin cambios de dependencias ni expectativas debilitadas.
+La incertidumbre va acompañada de la explicación de apertura del programa de correo y del enlace de consulta, traducidos en los tres idiomas. No se muestra «hemos recibido» ni se afirma entrega o lectura.
 
-Laboratorio reproducible: build + Next en 127.0.0.1:3341 y `node scripts/contact-lab.mjs` en 127.0.0.1:3342/__fixture. Solo abre conexión al Next local. Adaptador/validaciones reales con respuestas HTTP simuladas; el script del widget se sustituye únicamente en ese proxy local por un botón rotulado «Validación simulada». No hay modo fixture en las rutas desplegadas. Escenarios seleccionables en el panel local, no en producción.
+## Lista única de activación
+| Dato necesario | Para qué sirve | Dónde configurarlo | Quién debe aportarlo |
+|---|---|---|---|
+| Destinatario comercial, ya confirmado en privado | Recibir solicitudes y consultas de recuperación; no acredita permiso para enviar como su dominio | `CONTACT_TO` en Vercel comercial; `CONTACT_RECIPIENT_CONFIRMED` y `CONTACT_MAILTO_ENABLED` únicamente al autorizar configuración/exposición del contacto | Titular: confirmación recibida. Administrador comercial: incorporación segura pendiente |
+| Remitente y dominio autorizado | From fijo, identidad de envío validada por el proveedor | Dominio/remitente en la cuenta de Resend autorizada y `CONTACT_FROM` en Vercel comercial | Titular de la cuenta y responsable del dominio |
+| Credencial específica de envío | Autorizar exclusivamente el transporte comercial con alcance mínimo | Secreto `CONTACT_RESEND_API_KEY` en el gestor de secretos o variables seguras del proyecto comercial y entorno exacto | Administrador autorizado de la cuenta de correo |
+| Turnstile para los dominios correspondientes | Validar los intentos en servidor, hostname y acción; evitar activar un formulario sin protección | Widget/hostnames autorizados; `CONTACT_TURNSTILE_SITE_KEY`, `CONTACT_TURNSTILE_SECRET_KEY`, `CONTACT_ORIGIN` y `CONTACT_DEPLOYMENT_ENV` en Vercel comercial | Administrador del servicio y responsable del proyecto comercial |
+| Identidad y contacto del responsable y contenido de privacidad pendiente | Informar del tratamiento, conservación, derechos y proveedores antes de recopilar datos | Contenido aprobado de privacidad en la web; `CONTACT_PRIVACY_REVIEWED` solo cuando esté completado | Responsable del tratamiento, con su asesoramiento correspondiente |
 
-Navegador a 1366x900 y 390x844: campos asociados, error inicial/foco, teclado, aceptación simulada, rechazo conservando campos y recuperación, timeout de cliente sin repetición. Anchuras de contenido 1351/375 por scrollbar, sin desbordamiento. Se revisa DOM/árbol y teclado; no es una prueba con lector de pantalla. Capturas reales en la carpeta privada hermana `evidence`, no añadidas a Git.
+`CONTACT_ENABLED` y los demás interruptores siguen desactivados. `.env.example` conserva únicamente valores vacíos/desactivados; no se incluye la dirección confirmada. Secretos introducidos directamente por el administrador mediante configuración segura, nunca en chat, Git ni copiándolos de Railway/Supabase.
 
-## Textos finales en español
-- Aceptación: «El proveedor de correo ha aceptado tu solicitud. La entrega en el buzón aún no está confirmada. No necesitas reenviarla.»
-- Rechazo acreditado: «La solicitud no ha sido aceptada. Conservamos los campos en esta página; puedes revisar los datos y reintentar.»
-- Resultado incierto: «No podemos confirmar el resultado. La solicitud podría haberse enviado. No la reenvíes ni recargues esta página para intentarlo; comprueba primero su recepción por otro canal.»
-- No configurado: «El envío desde esta web todavía no está disponible. No se ha enviado ninguna solicitud.»
-- Seguridad: «No se ha enviado la solicitud. Completa o renueva la comprobación de seguridad y vuelve a intentarlo.»
+Puede aprovecharse el proyecto comercial de Vercel y su dominio actual. También un dominio y cuenta de correo existentes si su titular acredita verificación, permiso comercial, cuota disponible y ausencia de gasto nuevo; esta tarea no acredita que ya exista un remitente utilizable. No es requisito comprar un dominio ni contratar un plan. Reutilizar cuentas, modificar DNS o configurar credenciales exige la autorización correspondiente. Recibir en un dominio ajeno no autoriza a enviar como él. Supabase Auth/SMTP queda separado.
 
-El servidor no responde 202 por el mero hecho de recibir el POST: espera aceptación explícita del proveedor. Ningún texto afirma entrega al buzón. Las tres traducciones se mantienen en `lib/translations.ts`.
+## Una sola prueba técnica futura, no ejecutada
+1. Antes de probar, aprobar expresamente la configuración concreta y el envío único; el destinatario ya está confirmado. Acreditar remitente/dominio, credencial comercial de alcance mínimo, cuota sin gasto y privacidad. Autorizar la exposición del contacto de recuperación en ese entorno. Introducir secretos directamente en Vercel comercial, únicamente para el Preview acordado, conservando Production intacta.
+2. Configurar el origen exacto y sus hostnames de Turnstile. Leer GET `/api/presentation-request` y comprobar disponibilidad y contacto de recuperación sin enviar nada.
+3. En una pestaña nueva, usar el formulario normal una sola vez: nombre «Prueba técnica Hospedios», empresa «WEB 1.2 — prueba sintética», correo técnico autorizado y mensaje «[PRUEBA TÉCNICA WEB 1.2 — IGNORAR COMO SOLICITUD COMERCIAL] Comprobación única de entrega y Reply-To. No responder automáticamente». El asunto del formulario sigue fijo: «Hospedios — Solicitud de presentación».
+4. Registrar el recibo y momento sin contenido personal en logs públicos. Confirmar por separado aceptación en el proveedor y recepción del único mensaje en el buzón, incluido spam; comprobar From/Reply-To sin enviar una respuesta.
+5. Si el resultado es incierto, no pulsar de nuevo ni usar el enlace de consulta durante esta prueba (supondría otro correo). Revisar en lectura proveedor y buzón con el titular. No declarar fallo por ausencia de correo ni repetir fuera de la ventana de idempotencia. Cualquier segundo envío necesita una decisión expresa posterior.
 
-## Una única prueba real propuesta, no ejecutada
-1. Confirmar el destinatario comercial en privado. Acreditar proveedor/cuenta comercial, dominio y remitente, cuota sin gasto nuevo, acceso mínimo y aviso de privacidad aprobado. Autorizar por separado configuración del Preview exacto y UN correo técnico. Introducir secretos directamente en Vercel comercial, nunca en chat/Git ni copiarlos de Railway/Supabase.
-2. Configurar solo ese Preview, con su origen y hostname de Turnstile, dejando Production intacta. Verificar en lectura GET de disponibilidad; no prueba entrega.
-3. Abrir una pestaña nueva con el formulario normal. Nombre «Prueba técnica Hospedios», empresa «WEB 1.2 — prueba sintética», correo de contacto técnico autorizado y mensaje «[PRUEBA TÉCNICA WEB 1.2 — IGNORAR COMO SOLICITUD COMERCIAL] Comprobación única de entrega y Reply-To. No responder automáticamente». Asunto fijo «Hospedios — Solicitud de presentación». Resolver el control real y pulsar una sola vez.
-4. Registrar fecha y recibo sin contenido ni direcciones en logs públicos. Confirmar aceptación en Resend y recepción del único mensaje en el buzón del destinatario (incluido spam), además de From/Reply-To. Aceptación no acredita inbox. No responder ni enviar segundo correo para probar Reply-To.
-5. Si hay incertidumbre, no reintentar: revisar los logs privados de proveedor y recepción. Solo una prueba posterior expresamente acordada si se demuestra no aceptación; no volver a enviar por ausencia de mensaje en el buzón.
-6. Sin habilitar Production, merge ni cambiar la aplicación operativa. La disponibilidad pública real requiere la aprobación posterior correspondiente.
+## Comprobaciones
+13 grupos de `npm run test:contact` PASS, reutilizando las doce regresiones previas. El grupo adicional verifica contacto de recuperación, asunto distinto, ausencia de datos personales en URL, bloqueo de reenvío y prohibición de activar sin esa salida. Se actualizan las expectativas del GET para su enlace de recuperación; no se debilitan las validaciones ni las pruebas de efectos.
 
-## Fuentes técnicas y límites
-- [API de Resend](https://resend.com/docs/api-reference/emails/send-email): sobre y respuesta con id.
-- [Idempotencia de Resend](https://resend.com/docs/dashboard/emails/idempotency-keys): clave por operación y ventana limitada.
-- [Validación de Turnstile](https://developers.cloudflare.com/turnstile/get-started/server-side-validation/): token de un uso, 300 segundos y validación en servidor; comprobar hostname/action.
+Build, TypeScript y diff --check PASS. Advertencia heredada de Node sobre stripTypeScriptTypes experimental; no es fallo.
 
-No se prueba reputación/deliverability, funcionamiento real del widget ni autorización de dominio/credenciales con dobles. No se garantiza entrega final ni deduplicación universal. No hay nueva base de datos ni almacenamiento duradero de solicitudes en la web: Resend sería el transporte y conserva su propio registro bajo condiciones que deben aprobarse antes de activar.
+Laboratorio de localhost 3341/3342, transporte y widget simulados. No hay fixture activable en el despliegue. Navegador 1366x900 y 390x844: aceptación, rechazo conservando campos y recuperación, incertidumbre con enlace visible, acceso por Tab, foco y ES/EN/FR. Se inspecciona el href sintético sin abrir el programa de correo. No se prueba entrega, funcionamiento de un cliente de correo ni lector de pantalla real. Capturas privadas hermanas `evidence/activation-*.png`, fuera de Git.
 
-La aplicación operativa, tarea 1.1 `ec5ddb3eef1354809f15ff864233156a1bebd98f`, tarea 1.2 pausada, Supabase, Railway, Auth, demo, flags, IA, economía y Ubikos permanecen fuera del alcance. Cero correos reales, llamadas a modelos, servicios activados o gasto nuevo.
+Los resultados de CI y Preview del SHA final se registran en la PR. El Preview solo acredita despliegue/lectura con envío desactivado, nunca entrega de correo.
 
-## Evidencia visual y estado de revisión
-- `web12-accepted-desktop.png`: aceptación simulada en el build final, 1366 px.
-- `web12-rejected-mobile.png` y `web12-accepted-mobile.png`: rechazo y recuperación conservando campos, 390 px.
-- `web12-sending-desktop.png` y `web12-uncertain-desktop.png`: progreso y timeout real del cliente contra transporte local retrasado. Segundo Enter bloqueado; panel confirma 1 petición y 1 intento simulado. Recarga conserva bloqueo y no repite.
-- `web12-unavailable-desktop.png`: build sin configuración (3341), sin transporte ni widget externo.
-- Estados de incertidumbre comprobados también en EN y FR. Confirmados cinco destinos de sección; ningún enlace legal nuevo o roto introducido.
-- Production revalidada antes del push: `2Dk3vAkbTHiEise49zBtMQgsuiQs`, main `d6b6e1d`, sin cambios. La actualización se limita al [borrador #1](https://github.com/Chispa2004/staynex-website/pull/1). El resultado de CI y Preview del SHA final se registra en la PR al terminar.
+## Conservación
+Production comercial sigue main `d6b6e1db025966dcf47f88b691e8ecfa64b43e07`; no se modifica el seguimiento de ramas ni las variables. Se reutiliza la lectura previa de Vercel: Preview sin variables Project/Shared y Production ligada a main; no cambia su objeto de configuración.
+
+Aplicación operativa, tarea 1.1 `ec5ddb3eef1354809f15ff864233156a1bebd98f`, tarea 1.2 pausada, Supabase, Railway, Auth, demo, flags, IA, economía y Ubikos intactos. Cero correos, llamadas a modelos o gasto nuevo. No hay merge, Production, DNS, servicios ni secretos remotos modificados.

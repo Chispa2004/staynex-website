@@ -87,6 +87,7 @@ const es = {
     ]
   },
   "form": {
+    "preparing": "Estamos preparando nuestro canal de contacto. Pronto podrás solicitar una presentación de Hospedios.",
     "eyebrow": "Hablemos de tu hotel",
     "title": "Descubre qué puede aportar Hospedios a tu hotel.",
     "body": "Cuéntanos cómo atendéis hoy a vuestros huéspedes y te mostraremos cómo podría encajar Hospedios.",
@@ -206,6 +207,7 @@ const en: Copy = {
     ]
   },
   "form": {
+    "preparing": "We’re preparing our contact channel. Soon you’ll be able to request a presentation of Hospedios.",
     "eyebrow": "Let's talk about your hotel",
     "title": "Discover what Hospedios could bring to your hotel.",
     "body": "Tell us how you support your guests today and we'll show you how Hospedios could fit.",
@@ -324,6 +326,7 @@ const fr: Copy = {
     ]
   },
   "form": {
+    "preparing": "Nous préparons notre canal de contact. Vous pourrez bientôt demander une présentation d’Hospedios.",
     "eyebrow": "Parlons de votre hôtel",
     "title": "Découvrez ce qu’Hospedios pourrait apporter à votre hôtel.",
     "body": "Expliquez-nous comment vous accompagnez vos clients aujourd’hui et nous vous montrerons comment Hospedios pourrait s’y intégrer.",

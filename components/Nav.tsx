@@ -16,8 +16,8 @@ export function Nav() {
     <a className="brand" href="#home" aria-label={t.nav.home}><BrandLockup descriptor={t.meta.descriptor}/></a>
     <nav className="nav-links" aria-label={t.nav.main}>{items.map(x=><a href={x.href} key={x.href}>{x.label}</a>)}</nav>
     <div className="language-switcher" aria-label={t.nav.language}>{locales.map(item=><button type="button" key={item} aria-pressed={locale===item} lang={item} onClick={()=>setLocale(item)} className={locale===item?"is-active":""}>{item.toUpperCase()}</button>)}</div>
-    <a className="nav-cta" href="#request-demo">{t.nav.requestDemo}<ArrowRight aria-hidden="true"/></a>
+    <a className="nav-cta" href="#benefits">{t.hero.secondary}<ArrowRight aria-hidden="true"/></a>
     <button type="button" className="menu-toggle" ref={trigger} aria-label={open?t.nav.close:t.nav.open} aria-expanded={open} aria-controls="mobile-navigation" onClick={()=>setOpen(!open)}>{open?<X aria-hidden="true"/>:<Menu aria-hidden="true"/>}</button>
-    <nav id="mobile-navigation" hidden={!open} className="commercial-mobile-menu" aria-label={t.nav.main}>{[...items,{href:"#request-demo",label:t.nav.requestDemo}].map(x=><a key={x.href} href={x.href} onClick={()=>setOpen(false)}>{x.label}</a>)}</nav>
+    <nav id="mobile-navigation" hidden={!open} className="commercial-mobile-menu" aria-label={t.nav.main}>{[...items,{href:"#benefits",label:t.hero.secondary}].map(x=><a key={x.label} href={x.href} onClick={()=>setOpen(false)}>{x.label}</a>)}</nav>
   </header></>;
 }

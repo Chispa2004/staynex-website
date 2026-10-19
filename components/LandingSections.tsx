@@ -2,7 +2,6 @@
 import { HeartHandshake, ClipboardList, Sparkles } from "lucide-react";
 import { useLanguage } from "@/components/LanguageProvider";
 import { SectionHeader } from "@/components/SectionHeader";
-import { PresentationForm } from "@/components/PresentationForm";
 export function BenefitsSection() {
   const {t}=useLanguage(); const icons=[HeartHandshake,ClipboardList,Sparkles];
   return <section tabIndex={-1} id="benefits" className="section-shell commercial-section"><SectionHeader {...t.benefits} />
@@ -24,5 +23,7 @@ export function TeamSection() {
 }
 export function ContactSection() {
   const {t}=useLanguage();
-  return <section tabIndex={-1} id="request-demo" className="section-shell commercial-section request-demo-section"><div><SectionHeader {...t.form}/></div><PresentationForm/></section>;
+  // Keep PresentationForm and its guarded transport for a separately authorized activation.
+  // This informational release never mounts fields, the challenge or submission effects.
+  return <section tabIndex={-1} id="request-demo" className="section-shell commercial-section request-demo-section"><div className="section-header"><p className="eyebrow">Hospedios</p><h2>{t.footer.contact}</h2><p>{t.form.preparing}</p></div></section>;
 }

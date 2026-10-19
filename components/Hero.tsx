@@ -11,8 +11,8 @@ export function Hero() {
         <p className="hero-label">{t.meta.descriptor}</p><h1>{t.meta.headline}</h1>
         <p className="hero-subtitle">{t.meta.description}</p>
         <div className="hero-actions">
-          <a className="button button-primary" href="#request-demo">{t.nav.requestDemo}<ArrowRight aria-hidden="true" /></a>
-          <a className="button button-secondary" href="#benefits">{t.hero.secondary}<ArrowDown aria-hidden="true" /></a>
+          <a className="button button-primary" href="#benefits">{t.hero.secondary}<ArrowRight aria-hidden="true" /></a>
+          <a className="button button-secondary" href="#journeys">{t.nav.journey}<ArrowDown aria-hidden="true" /></a>
         </div>
       </div><DashboardMockup />
     </div>

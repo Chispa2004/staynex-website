@@ -178,3 +178,53 @@ main { overflow: clip; }
  .hospitality-team .phone-frame {padding:20px;border-radius:22px;}
  .hospitality-team .capability-card {padding:24px;}
 }
+
+/* WEB 1.10: restore the original d6b6e1d hero composition, without its navbar. */
+.hero { min-height:1040px; padding:144px 0 120px; }
+.hero-inner { grid-template-columns:minmax(0,.86fr) minmax(520px,1.14fr); gap:56px; }
+.hero h1 { font-size:64px; font-weight:400; line-height:1.02; letter-spacing:-2px; }
+.hero-subtitle { font-size:20px; line-height:1.65; }
+.hero-actions { gap:14px; }
+.hero .button { font-size:15px; }
+.hero-label { color:var(--gold); }
+.hero .dashboard-stage { margin:0; min-width:0; }
+.dashboard-stage > figcaption { position:absolute; top:-32px; z-index:7; margin:0; color:#d2dfdc; font-size:12px; letter-spacing:.5px; }
+.hero .dashboard-stage *, .hero .dashboard-stage *::before, .hero .dashboard-stage *::after { animation:none; }
+.hero .status-pill::before { display:none; }
+.hero .journey-timeline { gap:5px; }
+.hero .journey-step { padding:7px 4px; }
+.hero .journey-step strong { font-size:10px; overflow-wrap:anywhere; }
+.hero .panel-title-row { gap:8px; }
+.hero .panel-kicker { color:#82591e; }
+.hero .health-row { grid-template-columns:auto minmax(0,1fr) auto; }
+.hero .health-row strong { font-size:12px; }
+.hero .dash-panel { min-width:0; }
+.hero .live-card-bottom { flex-wrap:wrap; gap:6px; }
+.hero .window-chrome > span { color:#c0cbd4; }
+.hero .feed-row small { color:#bdc7cf; white-space:nowrap; }
+@media(max-width:1120px) {
+ .hero { min-height:auto; padding:144px 0 120px; }
+ .hero-inner { grid-template-columns:1fr; gap:48px; }
+ .hero .dashboard-stage { width:100%; max-width:760px; justify-self:center; }
+}
+@media(max-width:760px) {
+ .hero { padding:128px 0 52px; }
+ .hero-inner { gap:40px; }
+ .hero h1 { font-size:42px; line-height:1.08; letter-spacing:-1.4px; }
+ .hero-subtitle { font-size:17px; line-height:1.6; }
+ .hero-actions { margin-top:26px; }
+ .hero .dashboard-stage { gap:14px; }
+ .hero .dashboard-stage > figcaption { position:relative; top:auto; order:0; margin-bottom:0; line-height:1.5; }
+ .hero .window-chrome { gap:8px; }
+ .hero .window-chrome > strong { display:flex; grid-column:1/-1; font-size:12px; color:#c0cbd4; }
+ .hero .journey-timeline { grid-template-columns:1fr; gap:8px; }
+ .hero .journey-step { padding:10px; }
+ .hero .journey-step strong { font-size:13px; }
+ .hero .dash-panel { padding:18px; }
+ .hero .message p,.hero .readiness-panel p,.hero .revenue-panel p,.hero .ai-panel p { font-size:14px; }
+ .hero .live-card { max-width:none; min-width:0; width:100%; }
+ .hero .live-card-4,.hero .live-card-5 { display:grid; inset:auto; }
+ .hero .operations-feed { width:100%; }
+ .hero .feed-row p { font-size:13px; }
+ .hero .health-row { font-size:14px; }
+}

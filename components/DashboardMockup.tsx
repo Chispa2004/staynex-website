@@ -2,18 +2,22 @@
 
 import { ArrowUpRight, CheckCircle2, MessageCircle, ShieldCheck, Sparkles } from "lucide-react";
 
+import { heroIllustration } from "@/lib/hero-illustration";
+
 import { useLanguage } from "@/components/LanguageProvider";
 
 export function DashboardMockup() {
-  const { t } = useLanguage();
+  const { locale } = useLanguage();
+  const panel = heroIllustration[locale];
 
   return (
-    <div className="dashboard-stage" aria-label="Staynex product interface preview">
+    <figure className="dashboard-stage" aria-labelledby="hero-example-caption">
+      <figcaption id="hero-example-caption">{panel.example}</figcaption>
       <div className="hero-orbit hero-orbit-one" aria-hidden="true" />
       <div className="hero-orbit hero-orbit-two" aria-hidden="true" />
 
-      <div className="floating-live-cloud" aria-hidden="true">
-        {t.liveCards.map(([title, meta, time, status, tone], index) => (
+      <div className="floating-live-cloud">
+        {panel.notifications.map(([title, meta, time, status, tone], index) => (
           <div className={`live-card live-card-${index + 1}`} key={title}>
             <div className="live-card-top">
               <span className={`live-dot tone-${tone}`} />
@@ -35,10 +39,9 @@ export function DashboardMockup() {
             <span />
             <span />
           </div>
-          <span>{t.dashboard.command}</span>
+          <span>Hospedios</span>
           <strong>
-            <i />
-            {t.dashboard.liveOperations}
+            {panel.activity}
           </strong>
         </div>
 
@@ -46,14 +49,14 @@ export function DashboardMockup() {
           <section className="dash-panel main-panel">
             <div className="panel-title-row">
               <div>
-                <span className="panel-kicker">{t.dashboard.today}</span>
-                <h3>{t.dashboard.guestJourney}</h3>
+                <span className="panel-kicker">{panel.today}</span>
+                <h3>{panel.guestJourney}</h3>
               </div>
-              <span className="status-pill">{t.dashboard.live}</span>
+              <span className="status-pill">{panel.sample}</span>
             </div>
 
             <div className="journey-timeline">
-              {t.dashboard.journey.map((step, index) => (
+              {panel.journey.map((step, index) => (
                 <div className={`journey-step journey-step-${index + 1}`} key={step}>
                   <span>{index + 1}</span>
                   <strong>{step}</strong>
@@ -64,47 +67,47 @@ export function DashboardMockup() {
             <div className="conversation-preview">
               <div className="message incoming">
                 <MessageCircle aria-hidden="true" />
-                <p>{t.dashboard.guestMessage}</p>
+                <p>{panel.guestMessage}</p>
               </div>
               <div className="message outgoing">
                 <Sparkles aria-hidden="true" />
-                <p>{t.dashboard.aiMessage}</p>
+                <p>{panel.aiMessage}</p>
               </div>
             </div>
           </section>
 
           <section className="dash-panel readiness-panel">
-            <span className="panel-kicker">{t.dashboard.reception}</span>
-            <h3>{t.dashboard.arrivalReadiness}</h3>
+            <span className="panel-kicker">{panel.reception}</span>
+            <h3>{panel.arrivalReadiness}</h3>
             <div className="readiness-ring">
               <span>92%</span>
             </div>
-            <p>{t.dashboard.readinessBody}</p>
+            <p>{panel.readinessBody}</p>
           </section>
 
           <section className="dash-panel revenue-panel">
             <div className="panel-title-row">
               <div>
-                <span className="panel-kicker">{t.dashboard.revenue}</span>
-                <h3>{t.dashboard.experienceSignals}</h3>
+                <span className="panel-kicker">{panel.revenue}</span>
+                <h3>{panel.experienceSignals}</h3>
               </div>
               <ArrowUpRight aria-hidden="true" />
             </div>
-            <div className="revenue-bars">
+            <div className="revenue-bars" aria-hidden="true">
               <span style={{ height: "44%" }} />
               <span style={{ height: "68%" }} />
               <span style={{ height: "52%" }} />
               <span style={{ height: "82%" }} />
               <span style={{ height: "61%" }} />
             </div>
-            <p>{t.dashboard.revenueBody}</p>
+            <p>{panel.revenueBody}</p>
           </section>
 
           <section className="dash-panel health-panel">
-            <span className="panel-kicker">{t.dashboard.hotelHealth}</span>
-            <h3>{t.dashboard.qualityMonitor}</h3>
+            <span className="panel-kicker">{panel.hotelHealth}</span>
+            <h3>{panel.qualityMonitor}</h3>
             <div className="health-list">
-              {t.health.signals.map(([label, value, tone]) => (
+              {panel.signals.map(([label, value, tone]) => (
                 <div className="health-row" key={label}>
                   <span className={`tone-dot tone-${tone}`} />
                   <span>{label}</span>
@@ -117,18 +120,18 @@ export function DashboardMockup() {
           <section className="dash-panel ai-panel">
             <div>
               <ShieldCheck aria-hidden="true" />
-              <span className="panel-kicker">{t.dashboard.aiQualityLab}</span>
+              <span className="panel-kicker">{panel.aiQualityLab}</span>
             </div>
-            <h3>{t.dashboard.replayReady}</h3>
-            <p>{t.dashboard.replayBody}</p>
+            <h3>{panel.replayReady}</h3>
+            <p>{panel.replayBody}</p>
             <div className="mini-checks">
               <span>
                 <CheckCircle2 aria-hidden="true" />
-                {t.dashboard.policyMatch}
+                {panel.policyMatch}
               </span>
               <span>
                 <CheckCircle2 aria-hidden="true" />
-                {t.dashboard.handoverTiming}
+                {panel.handoverTiming}
               </span>
             </div>
           </section>
@@ -138,9 +141,9 @@ export function DashboardMockup() {
       <div className="operations-feed">
         <div className="feed-header">
           <span className="tone-dot tone-green" />
-          <strong>{t.dashboard.feed}</strong>
+          <strong>{panel.feed}</strong>
         </div>
-        {t.liveCards.slice(0, 4).map(([title, , time, , tone]) => (
+        {panel.notifications.slice(0, 4).map(([title, , time, , tone]) => (
           <div className="feed-row" key={title}>
             <span className={`tone-dot tone-${tone}`} />
             <p>{title}</p>
@@ -148,6 +151,6 @@ export function DashboardMockup() {
           </div>
         ))}
       </div>
-    </div>
+    </figure>
   );
 }

@@ -17,10 +17,11 @@ function isLocale(value: string | null): value is Locale {
 }
 
 export function LanguageProvider({ children }: { children: ReactNode }) {
-  const [locale, setLocaleState] = useState<Locale>("en");
+  const [locale, setLocaleState] = useState<Locale>("es");
 
   useEffect(() => {
-    const stored = window.localStorage.getItem("staynex-locale");
+    let stored: string | null = null;
+    try { stored = window.localStorage.getItem("staynex-locale"); } catch { /* Storage is optional. */ }
 
     if (isLocale(stored)) {
       setLocaleState(stored);
@@ -30,7 +31,7 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
 
   const setLocale = (nextLocale: Locale) => {
     setLocaleState(nextLocale);
-    window.localStorage.setItem("staynex-locale", nextLocale);
+    try { window.localStorage.setItem("staynex-locale", nextLocale); } catch { /* Keep language usable without storage. */ }
     document.documentElement.lang = nextLocale;
   };
 
